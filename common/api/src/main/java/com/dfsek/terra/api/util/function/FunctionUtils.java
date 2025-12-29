@@ -1,5 +1,8 @@
 package com.dfsek.terra.api.util.function;
 
+import com.dfsek.terra.api.util.generic.either.Either;
+
+import java.util.Optional;
 import java.util.function.Consumer;
 import java.util.function.Function;
 
@@ -12,6 +15,11 @@ public final class FunctionUtils {
             c.accept(co);
             return co;
         };
+    }
+
+    @SuppressWarnings("unchecked")
+    public static <T, L> Either<L, T> toEither(Optional<T> o, L de) {
+        return (Either<L, T>) o.map(Either::right).orElseGet(() -> Either.left(de));
     }
 
 }
