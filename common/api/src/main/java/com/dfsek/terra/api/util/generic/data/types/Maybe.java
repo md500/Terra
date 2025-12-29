@@ -6,24 +6,22 @@ import java.util.Optional;
 import java.util.function.Function;
 
 
-public interface Maybe<T> extends Monad<T, Maybe<?>> {
-    @Override
-    <T2> Maybe<T2> bind(Function<T, Monad<T2, Maybe<?>>> map);
+public interface Maybe<T>{
 
-    @Override
-    <T2> Maybe<T2> identity();
-
-    @Override
-    <U> Maybe<U> map(Function<T, U> map);
-
-    @Override
-    Monad<T, Maybe<?>> multiply(Maybe<?> t);
-
-    default Optional<T> toOptional() {
-
-    }
+    Optional<T> toOptional();
 
     record Just<T>(T value) implements Maybe<T> {
 
+        @Override
+        public Optional<T> toOptional() {
+            return Optional.of(value);
+        }
+    }
+    record Nothing<T>() implements Maybe<T> {
+
+        @Override
+        public Optional<T> toOptional() {
+            return Optional.empty();
+        }
     }
 }
