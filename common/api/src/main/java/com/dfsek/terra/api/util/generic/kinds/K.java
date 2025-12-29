@@ -1,7 +1,7 @@
 package com.dfsek.terra.api.util.generic.kinds;
 
 /**
- * Kind
+ * Kind of the type T<U>
  */
 public interface K<T, U> {
     @SuppressWarnings("unchecked")

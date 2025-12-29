@@ -21,7 +21,7 @@ import com.dfsek.terra.api.event.events.platform.CommandRegistrationEvent;
 import com.dfsek.terra.api.event.functional.FunctionalEventHandler;
 import com.dfsek.terra.api.inject.annotations.Inject;
 import com.dfsek.terra.api.registry.Registry;
-import com.dfsek.terra.api.util.generic.either.Either;
+import com.dfsek.terra.api.util.generic.data.types.Either;
 import com.dfsek.terra.api.util.reflection.TypeKey;
 import com.dfsek.terra.api.world.World;
 import com.dfsek.terra.api.world.biome.Biome;

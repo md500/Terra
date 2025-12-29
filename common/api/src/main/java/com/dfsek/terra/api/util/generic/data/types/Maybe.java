@@ -1,4 +1,6 @@
-package com.dfsek.terra.api.util.generic;
+package com.dfsek.terra.api.util.generic.data.types;
+
+import com.dfsek.terra.api.util.generic.control.Monad;
 
 import java.util.Optional;
 import java.util.function.Function;

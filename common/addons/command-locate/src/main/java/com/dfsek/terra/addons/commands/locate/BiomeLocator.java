@@ -2,7 +2,7 @@ package com.dfsek.terra.addons.commands.locate;
 
 import com.dfsek.seismic.type.vector.Vector2Int;
 import com.dfsek.seismic.type.vector.Vector3Int;
-import com.dfsek.terra.api.util.generic.either.Either;
+import com.dfsek.terra.api.util.generic.data.types.Either;
 import com.dfsek.terra.api.world.biome.Biome;
 import com.dfsek.terra.api.world.biome.generation.BiomeProvider;
 import com.dfsek.terra.api.world.info.WorldProperties;

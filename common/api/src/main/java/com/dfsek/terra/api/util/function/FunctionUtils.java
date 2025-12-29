@@ -1,6 +1,6 @@
 package com.dfsek.terra.api.util.function;
 
-import com.dfsek.terra.api.util.generic.either.Either;
+import com.dfsek.terra.api.util.generic.data.types.Either;
 
 import java.util.Optional;
 import java.util.function.Consumer;
