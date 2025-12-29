@@ -1,5 +1,7 @@
 package com.dfsek.terra.api.util.generic;
 
+import com.dfsek.terra.api.util.generic.kinds.K;
+
 import java.util.function.Function;
 
 

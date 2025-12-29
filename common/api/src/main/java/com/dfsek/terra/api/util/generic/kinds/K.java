@@ -1,4 +1,4 @@
-package com.dfsek.terra.api.util.generic;
+package com.dfsek.terra.api.util.generic.kinds;
 
 /**
  * Kind
