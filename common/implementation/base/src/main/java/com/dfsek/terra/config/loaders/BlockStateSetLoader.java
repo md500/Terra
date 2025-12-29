@@ -31,7 +31,7 @@ import com.dfsek.terra.api.util.collection.BlockStateSet;
 
 
 @SuppressWarnings("unchecked")
-public class MaterialSetLoader implements TypeLoader<BlockStateSet> {
+public class BlockStateSetLoader implements TypeLoader<BlockStateSet> {
     @Override
     public BlockStateSet load(@NotNull AnnotatedType type, @NotNull Object o, @NotNull ConfigLoader configLoader, DepthTracker depthTracker)
     throws LoadException {

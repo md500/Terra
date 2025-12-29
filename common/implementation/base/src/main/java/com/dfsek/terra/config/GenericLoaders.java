@@ -34,7 +34,7 @@ import com.dfsek.terra.api.util.collection.ProbabilityCollection;
 import com.dfsek.terra.api.util.range.Range;
 import com.dfsek.terra.config.loaders.ExpressionParserOptionsTemplate;
 import com.dfsek.terra.config.loaders.LinkedHashMapLoader;
-import com.dfsek.terra.config.loaders.MaterialSetLoader;
+import com.dfsek.terra.config.loaders.BlockStateSetLoader;
 import com.dfsek.terra.config.loaders.ProbabilityCollectionLoader;
 import com.dfsek.terra.config.loaders.RangeLoader;
 import com.dfsek.terra.config.loaders.VersionLoader;
@@ -53,7 +53,7 @@ public class GenericLoaders implements LoaderRegistrar {
         registry.registerLoader(ProbabilityCollection.class, new ProbabilityCollectionLoader())
             .registerLoader(Range.class, new RangeLoader())
             .registerLoader(Version.class, new VersionLoader())
-            .registerLoader(BlockStateSet.class, new MaterialSetLoader())
+            .registerLoader(BlockStateSet.class, new BlockStateSetLoader())
             .registerLoader(VersionRange.class, new VersionRangeLoader())
             .registerLoader(LinkedHashMap.class, new LinkedHashMapLoader())
             .registerLoader(ParseOptions.class, ExpressionParserOptionsTemplate::new);
