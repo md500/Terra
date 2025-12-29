@@ -7,81 +7,109 @@
 
 package com.dfsek.terra.api.util.generic.either;
 
+import com.dfsek.terra.api.util.function.FunctionUtils;
+
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Objects;
 import java.util.Optional;
 import java.util.function.Consumer;
+import java.util.function.Function;
 
 
-public final class Either<L, R> {
-    private final L left;
-    private final R right;
-    private final boolean leftPresent;
-
-    private Either(L left, R right, boolean leftPresent) {
-        this.left = left;
-        this.right = right;
-        this.leftPresent = leftPresent;
+public interface Either<L, R> {
+    default Either<L, R> ifLeft(Consumer<L> action) {
+        return mapLeft(FunctionUtils.lift(action));
+    }
+    default Either<L, R> ifRight(Consumer<R> action) {
+        return mapRight(FunctionUtils.lift(action));
     }
 
+    <L1> Either<L1, R> mapLeft(Function<L, L1> f);
+    <R1> Either<L, R1> mapRight(Function<R, R1> f);
+
+    Optional<L> getLeft();
+    Optional<R> getRight();
+    boolean isLeft();
+    boolean isRight();
+
+    @SuppressWarnings({ "rawtypes", "unchecked" })
     @NotNull
     @Contract("_ -> new")
-    public static <L1, R1> Either<L1, R1> left(L1 left) {
-        return new Either<>(Objects.requireNonNull(left), null, true);
+    static <L1, R1> Either<L1, R1> left(L1 left) {
+        return new Left(Objects.requireNonNull(left));
     }
 
+    @SuppressWarnings({ "rawtypes", "unchecked" })
     @NotNull
     @Contract("_ -> new")
-    public static <L1, R1> Either<L1, R1> right(R1 right) {
-        return new Either<>(null, Objects.requireNonNull(right), false);
+    static <L1, R1> Either<L1, R1> right(R1 right) {
+        return new Right(Objects.requireNonNull(right));
     }
+    record Left<T>(T value) implements Either<T, Void> {
 
-    @NotNull
-    @Contract("_ -> this")
-    public Either<L, R> ifLeft(Consumer<L> action) {
-        if(leftPresent) action.accept(left);
-        return this;
+        @Override
+        public <L1> Either<L1, Void> mapLeft(Function<T, L1> f) {
+            return new Left<>(f.apply(value));
+        }
+
+        @SuppressWarnings({ "unchecked" })
+        @Override
+        public <R1> Either<T, R1> mapRight(Function<Void, R1> f) {
+            return (Either<T, R1>) this;
+        }
+
+        @Override
+        public Optional<T> getLeft() {
+            return Optional.of(value);
+        }
+
+        @Override
+        public Optional<Void> getRight() {
+            return Optional.empty();
+        }
+
+        @Override
+        public boolean isLeft() {
+            return true;
+        }
+
+        @Override
+        public boolean isRight() {
+            return false;
+        }
     }
+    record Right<T>(T value) implements Either<Void, T> {
+        @SuppressWarnings({ "unchecked" })
+        @Override
+        public <L1> Either<L1, T> mapLeft(Function<Void, L1> f) {
+            return (Either<L1, T>) this;
+        }
 
-    @NotNull
-    @Contract("_ -> this")
-    public Either<L, R> ifRight(Consumer<R> action) {
-        if(!leftPresent) action.accept(right);
-        return this;
-    }
+        @Override
+        public <R1> Either<Void, R1> mapRight(Function<T, R1> f) {
+            return new Right<>(f.apply(value));
+        }
 
-    @NotNull
-    public Optional<L> getLeft() {
-        if(leftPresent) return Optional.of(left);
-        return Optional.empty();
-    }
+        @Override
+        public Optional<Void> getLeft() {
+            return Optional.empty();
+        }
 
-    @NotNull
-    public Optional<R> getRight() {
-        if(!leftPresent) return Optional.of(right);
-        return Optional.empty();
-    }
+        @Override
+        public Optional<T> getRight() {
+            return Optional.of(value);
+        }
 
-    public boolean hasLeft() {
-        return leftPresent;
-    }
+        @Override
+        public boolean isLeft() {
+            return false;
+        }
 
-    public boolean hasRight() {
-        return !leftPresent;
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(left, right);
-    }
-
-    @Override
-    public boolean equals(Object obj) {
-        if(!(obj instanceof Either<?, ?> that)) return false;
-
-        return (this.leftPresent && that.leftPresent && Objects.equals(this.left, that.left))
-               || (!this.leftPresent && !that.leftPresent && Objects.equals(this.right, that.right));
+        @Override
+        public boolean isRight() {
+            return true;
+        }
     }
 }

@@ -21,10 +21,7 @@ public class ShortcutBlockStateFallbackAddon implements AddonInitializer {
         platform.getEventManager()
             .getHandler(FunctionalEventHandler.class)
             .register(addon, ConfigPackPreLoadEvent.class)
-            .then(event -> event.getPack()
-                .registerShortcut(Palette.class, "FALLBACK",
-                    (configLoader, input, tracker) -> new SingletonPalette(
-                        configLoader.loadType(BlockState.class, input, tracker))))
+
             .failThrough();
 
     }
