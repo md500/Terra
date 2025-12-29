@@ -27,21 +27,21 @@ import java.lang.reflect.AnnotatedType;
 import java.util.List;
 
 import com.dfsek.terra.api.block.BlockType;
-import com.dfsek.terra.api.util.collection.MaterialSet;
+import com.dfsek.terra.api.util.collection.BlockStateSet;
 
 
 @SuppressWarnings("unchecked")
-public class MaterialSetLoader implements TypeLoader<MaterialSet> {
+public class MaterialSetLoader implements TypeLoader<BlockStateSet> {
     @Override
-    public MaterialSet load(@NotNull AnnotatedType type, @NotNull Object o, @NotNull ConfigLoader configLoader, DepthTracker depthTracker)
+    public BlockStateSet load(@NotNull AnnotatedType type, @NotNull Object o, @NotNull ConfigLoader configLoader, DepthTracker depthTracker)
     throws LoadException {
         List<String> stringData = (List<String>) o;
 
         if(stringData.size() == 1) {
-            return MaterialSet.singleton(configLoader.loadType(BlockType.class, stringData.get(0), depthTracker));
+            return BlockStateSet.singleton(configLoader.loadType(BlockType.class, stringData.get(0), depthTracker));
         }
 
-        MaterialSet set = new MaterialSet();
+        BlockStateSet set = new BlockStateSet();
 
         for(String string : stringData) {
             try {

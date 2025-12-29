@@ -13,13 +13,13 @@ import com.dfsek.tectonic.api.config.template.object.ObjectTemplate;
 import com.dfsek.terra.addons.feature.locator.patterns.MatchPattern;
 import com.dfsek.terra.addons.feature.locator.patterns.Pattern;
 import com.dfsek.terra.api.config.meta.Meta;
-import com.dfsek.terra.api.util.collection.MaterialSet;
+import com.dfsek.terra.api.util.collection.BlockStateSet;
 import com.dfsek.terra.api.util.range.Range;
 
 
 public class BlockSetMatchPatternTemplate implements ObjectTemplate<Pattern> {
     @Value("blocks")
-    private @Meta MaterialSet blocks;
+    private @Meta BlockStateSet blocks;
 
     @Value("offset")
     private @Meta Range offset;

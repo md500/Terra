@@ -3,7 +3,7 @@ package com.dfsek.terra.addons.ore.utils;
 import java.util.random.RandomGenerator;
 
 import com.dfsek.terra.api.block.BlockType;
-import com.dfsek.terra.api.util.collection.MaterialSet;
+import com.dfsek.terra.api.util.collection.BlockStateSet;
 import com.dfsek.terra.api.world.WritableWorld;
 
 
@@ -14,7 +14,7 @@ public class VanillaOreUtils {
         return random.nextFloat() < exposedChance;
     }
 
-    public static boolean shouldPlace(MaterialSet replaceable, BlockType type, Double exposedChance, RandomGenerator random,
+    public static boolean shouldPlace(BlockStateSet replaceable, BlockType type, Double exposedChance, RandomGenerator random,
                                       WritableWorld world,
                                       int x,
                                       int y, int z) {

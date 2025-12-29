@@ -21,35 +21,35 @@ import com.dfsek.terra.api.block.BlockType;
 import com.dfsek.terra.api.block.state.BlockState;
 
 
-public class MaterialSet extends HashSet<BlockType> {
+public class BlockStateSet extends HashSet<BlockType> {
     @Serial
     private static final long serialVersionUID = 3056512763631017301L;
 
-    public static MaterialSet singleton(BlockType material) {
+    public static BlockStateSet singleton(BlockType material) {
         return new Singleton(material);
     }
 
-    public static MaterialSet get(BlockType... materials) {
-        MaterialSet set = new MaterialSet();
+    public static BlockStateSet get(BlockType... materials) {
+        BlockStateSet set = new BlockStateSet();
         set.addAll(Arrays.asList(materials));
         return set;
     }
 
-    public static MaterialSet get(BlockState... materials) {
-        MaterialSet set = new MaterialSet();
+    public static BlockStateSet get(BlockState... materials) {
+        BlockStateSet set = new BlockStateSet();
         Arrays.stream(materials).forEach(set::add);
         return set;
     }
 
-    public static MaterialSet empty() {
-        return new MaterialSet();
+    public static BlockStateSet empty() {
+        return new BlockStateSet();
     }
 
     private void add(BlockState data) {
         add(data.getBlockType());
     }
 
-    private static final class Singleton extends MaterialSet {
+    private static final class Singleton extends BlockStateSet {
         private final BlockType element;
 
         Singleton(BlockType e) {
