@@ -9,4 +9,8 @@ public interface Invalid {
     default <T> Either<Invalid, T> left() {
         return Either.left(this);
     }
+
+    default IllegalArgumentException toIllegal() {
+        return new IllegalArgumentException(message());
+    }
 }

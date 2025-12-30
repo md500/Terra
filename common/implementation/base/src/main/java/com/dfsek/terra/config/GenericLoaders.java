@@ -24,6 +24,8 @@ import com.dfsek.tectonic.api.TypeRegistry;
 
 import java.util.LinkedHashMap;
 
+import com.dfsek.tectonic.api.exception.LoadException;
+
 import com.dfsek.terra.api.Platform;
 import com.dfsek.terra.api.addon.BaseAddon;
 import com.dfsek.terra.api.block.BlockType;
@@ -61,9 +63,9 @@ public class GenericLoaders implements LoaderRegistrar {
         if(platform != null) {
             registry.registerLoader(BaseAddon.class, platform.getAddons())
                 .registerLoader(BlockType.class, (type, object, configLoader, depthTracker) -> platform
-                    .getWorldHandle().createBlockState((String) object).blockType())
+                    .getWorldHandle().createBlockState((String) object).collectThrow(left -> new LoadException(left.message(), depthTracker)).blockType())
                 .registerLoader(BlockState.class, (type, object, configLoader, depthTracker) -> platform
-                    .getWorldHandle().createBlockState((String) object));
+                    .getWorldHandle().createBlockState((String) object).collectThrow(left -> new LoadException("Invalid BlockState \"" + object + "\": " + left.message(), depthTracker)));
         }
     }
 }

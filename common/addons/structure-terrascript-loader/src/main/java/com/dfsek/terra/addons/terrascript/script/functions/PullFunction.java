@@ -33,7 +33,9 @@ public class PullFunction implements Function<Void> {
         this.position = position;
         if(!(data instanceof ConstantExpression)) throw new ParseException("Block data must be constant", data.getPosition());
 
-        this.data = platform.getWorldHandle().createBlockState(((ConstantExpression<String>) data).getConstant());
+        String constant = ((ConstantExpression<String>) data).getConstant();
+        this.data = platform.getWorldHandle().createBlockState(constant).collectThrow(
+            left -> new ParseException("Invalid block state: \"" + constant + "\": " + left.message(), position));
         this.x = x;
         this.y = y;
         this.z = z;
