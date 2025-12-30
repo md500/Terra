@@ -17,7 +17,6 @@ import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Objects;
-import java.util.Optional;
 import java.util.function.Consumer;
 import java.util.function.Function;
 
@@ -63,8 +62,18 @@ public interface Either<L, R> extends Monad<R, Either<?, ?>>, BiFunctor<L, R, Ei
 
     <U> U collect(Function<L, U> left, Function<R, U> right);
 
+    default Either<L, R> consume(Consumer<L> left, Consumer<R> right) {
+        return mapLeft(l -> {
+            left.accept(l);
+            return l;
+        }).mapRight(r -> {
+            right.accept(r);
+            return r;
+        });
+    }
+
     @SuppressWarnings("Convert2MethodRef")
-    default <T extends Throwable> R collectThrow(Function<L, T> left) throws T{
+    default <T extends Throwable> R collectThrow(Function<L, T> left) throws T {
         return mapLeft(left).collect(l -> FunctionUtils.sneakyThrow(l), Function.identity());
     }
 
@@ -125,7 +134,7 @@ public interface Either<L, R> extends Monad<R, Either<?, ?>>, BiFunctor<L, R, Ei
         return new Left<>(Objects.requireNonNull(left));
     }
 
-    @SuppressWarnings({"unchecked" })
+    @SuppressWarnings({ "unchecked" })
     @NotNull
     @Contract("_ -> new")
     static <L1, R1> Either<L1, R1> right(R1 right) {

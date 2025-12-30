@@ -1,5 +1,10 @@
 package com.dfsek.terra.api.registry.key;
 
+import com.dfsek.terra.api.error.Invalid;
+import com.dfsek.terra.api.error.InvalidKey;
+import com.dfsek.terra.api.util.generic.data.types.Either;
+import com.dfsek.terra.api.util.generic.data.types.Maybe;
+
 import java.util.Objects;
 import java.util.regex.Pattern;
 
@@ -26,14 +31,14 @@ public final class RegistryKey implements StringIdentifiable, Namespaced {
         this.id = id;
     }
 
-    public static RegistryKey parse(String key) {
+    public static Either<Invalid, RegistryKey> parse(String key) {
         if(key.chars().filter(c -> c == ':').count() != 1) {
-            throw new IllegalArgumentException("Malformed RegistryKey: " + key);
+            return Either.left(new InvalidKey("Malformed RegistryKey: " + key));
         }
         String namespace = key.substring(0, key.indexOf(":"));
         String id = key.substring(key.indexOf(":") + 1);
 
-        return new RegistryKey(namespace, id);
+        return Either.right(new RegistryKey(namespace, id));
     }
 
     public static RegistryKey of(String namespace, String id) {
