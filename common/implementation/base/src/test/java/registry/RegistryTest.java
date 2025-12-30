@@ -17,6 +17,8 @@
 
 package registry;
 
+import com.dfsek.terra.api.util.generic.data.types.Either;
+
 import org.junit.jupiter.api.Test;
 
 import com.dfsek.terra.api.registry.CheckedRegistry;
@@ -37,7 +39,7 @@ public class RegistryTest {
 
         test.register(RegistryKey.parse("test:test"), "bazinga");
 
-        assertEquals(test.get(RegistryKey.parse("test:test")).orElseThrow(), "bazinga");
+        assertEquals(test.get(RegistryKey.parse("test:test")).orThrow(), "bazinga");
     }
 
     @Test
@@ -60,7 +62,7 @@ public class RegistryTest {
 
         test.register(RegistryKey.parse("test:test"), "bazinga");
 
-        assertEquals(test.get(RegistryKey.parse("test:test")).orElseThrow(), "bazinga");
+        assertEquals(test.get(RegistryKey.parse("test:test")).orThrow(), "bazinga");
 
         try {
             test.register(RegistryKey.parse("test:test"), "bazinga2");
@@ -76,7 +78,7 @@ public class RegistryTest {
 
         test.register(RegistryKey.parse("test:test"), "bazinga");
 
-        assertEquals(test.getByID("test").orElseThrow(), "bazinga");
+        assertEquals(test.getByID("test").collectThrow(RuntimeException::new), "bazinga");
     }
 
     @Test
@@ -86,11 +88,8 @@ public class RegistryTest {
         test.registerChecked(RegistryKey.parse("test:test"), "bazinga");
         test.registerChecked(RegistryKey.parse("test2:test"), "bazinga");
 
-        try {
-            test.getByID("test");
-            fail("Shouldn't be able to get with ambiguous ID!");
-        } catch(IllegalArgumentException ignore) {
+        Either<String, String> result = test.getByID("test");
+        assertTrue(result.isLeft());
 
-        }
     }
 }

@@ -26,6 +26,15 @@ public final class FunctionUtils {
         return either.collect(Function.identity(), Function.identity());
     }
 
+    public static <T extends Throwable, U> U throw_(T e) throws T {
+        throw e;
+    }
+
+    @SuppressWarnings("unchecked")
+    public static <E extends Throwable, U> U sneakyThrow(Throwable e) throws E {
+        throw (E) e;
+    }
+
     public static <T, U> Function<T, Either<Exception, U>> liftTry(Function<T, U> f) {
         return s -> {
             try {

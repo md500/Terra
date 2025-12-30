@@ -95,7 +95,7 @@ public final class TerraMinestomPlatform extends AbstractPlatform {
 
         MinecraftServer.getInstanceManager().getInstances().forEach(world -> {
             if(world.generator() instanceof MinestomChunkGeneratorWrapper wrapper) {
-                getConfigRegistry().get(wrapper.getPack().getRegistryKey()).ifPresent(pack -> {
+                getConfigRegistry().get(wrapper.getPack().getRegistryKey()).consume(pack -> {
                     wrapper.setPack(pack);
                     LOGGER.info("Replaced pack in chunk generator for instance {}", world.getUuid());
                 });

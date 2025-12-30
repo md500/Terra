@@ -8,6 +8,10 @@
 package com.dfsek.terra.api.registry;
 
 import com.dfsek.tectonic.api.loader.type.TypeLoader;
+
+import com.dfsek.terra.api.util.generic.data.types.Either;
+import com.dfsek.terra.api.util.generic.data.types.Maybe;
+
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
@@ -32,7 +36,7 @@ public interface Registry<T> extends TypeLoader<T> {
      * @return Value matching the identifier, {@code null} if no value is present.
      */
     @Contract(pure = true)
-    Optional<T> get(@NotNull RegistryKey key);
+    Maybe<T> get(@NotNull RegistryKey key);
 
     /**
      * Check if the registry contains a value.
@@ -82,13 +86,13 @@ public interface Registry<T> extends TypeLoader<T> {
         return getType().getRawType();
     }
 
-    default Optional<T> getByID(String id) {
+    default Either<String, T> getByID(String id) {
         return getByID(id, map -> {
-            if(map.isEmpty()) return Optional.empty();
+            if(map.isEmpty()) return Either.left("No such element.");
             if(map.size() == 1) {
-                return map.values().stream().findFirst(); // only one value.
+                return Either.right(map.values().stream().findFirst().get()); // only one value.
             }
-            throw new IllegalArgumentException("ID \"" + id + "\" is ambiguous; matches: " + map
+            return Either.<String, T>left("ID \"" + id + "\" is ambiguous; matches: " + map
                 .keySet()
                 .stream()
                 .map(RegistryKey::toString)
@@ -102,9 +106,9 @@ public interface Registry<T> extends TypeLoader<T> {
 
     Map<RegistryKey, T> getMatches(String id);
 
-    default Optional<T> getByID(String attempt, Function<Map<RegistryKey, T>, Optional<T>> reduction) {
+    default Either<String, T> getByID(String attempt, Function<Map<RegistryKey, T>, Either<String, T>> reduction) {
         if(attempt.contains(":")) {
-            return get(RegistryKey.parse(attempt));
+            return get(RegistryKey.parse(attempt)).toEither("No such value.");
         }
         return reduction.apply(getMatches(attempt));
     }

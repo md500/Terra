@@ -41,7 +41,7 @@ public class LocateCommandAddon implements AddonInitializer {
     private BaseAddon addon;
 
     private static Registry<Biome> getBiomeRegistry(CommandContext<CommandSender> sender) {
-        return sender.sender().getEntity().orElseThrow().world().getPack().getRegistry(Biome.class);
+        return sender.sender().getEntity().orThrow().world().getPack().getRegistry(Biome.class);
     }
 
     @Override
@@ -69,7 +69,7 @@ public class LocateCommandAddon implements AddonInitializer {
                         .handler(context -> {
                             // 1. Gather Context & Arguments
                             Biome targetBiome = context.get("biome");
-                            Entity sender = context.sender().getEntity().orElseThrow(
+                            Entity sender = context.sender().getEntity().orThrow(
                                 () -> new Error("Only entities can run this command."));
                             World world = sender.world();
 

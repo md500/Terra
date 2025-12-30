@@ -2,7 +2,9 @@ package com.dfsek.terra.api.util.generic.data.types;
 
 import com.dfsek.terra.api.util.generic.control.Monad;
 
+import java.util.NoSuchElementException;
 import java.util.Optional;
+import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.function.Supplier;
@@ -21,6 +23,7 @@ public interface Maybe<T> extends Monad<T, Maybe<?>> {
     Optional<T> toOptional();
 
     <L> Either<L, T> toEither(L l);
+
     T get(Supplier<T> def);
 
     boolean isJust();
@@ -32,11 +35,44 @@ public interface Maybe<T> extends Monad<T, Maybe<?>> {
         return get(() -> def);
     }
 
+    default Maybe<T> consume(Consumer<T> c) {
+        return map(m -> {
+            c.accept(m);
+            return m;
+        });
+    }
+
+    default Maybe<T> ifNothing(Runnable r) {
+        if(!isJust()) {
+            r.run();
+        }
+        return this;
+    }
+
     default <T1> Maybe<T1> overwrite(Maybe<T1> m) {
         return bind(ignore -> m);
     }
 
     Maybe<T> or(Supplier<Maybe<T>> or);
+
+    default Maybe<T> orJust(Supplier<T> or) {
+        return or(() -> just(or.get()));
+    }
+
+
+    @Deprecated
+    default <X extends Throwable> T orThrow() {
+        return get(() -> { throw new NoSuchElementException("No value present."); });
+    }
+
+    @Deprecated
+    default <X extends Throwable> T orThrow(Supplier<X> e) throws X {
+        if(isJust()) {
+            return orThrow();
+        }
+        throw e.get();
+    }
+
 
     default Maybe<T> or(Maybe<T> or) {
         return or(() -> or);
@@ -52,6 +88,11 @@ public interface Maybe<T> extends Monad<T, Maybe<?>> {
 
     static <T> Maybe<T> fromOptional(Optional<T> op) {
         return op.map(Maybe::just).orElseGet(Maybe::nothing);
+    }
+
+    static <T> Maybe<T> ofNullable(T t) {
+        if(t == null) return nothing();
+        return just(t);
     }
 
     static <T1> Maybe<T1> just(T1 t) {

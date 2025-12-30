@@ -51,7 +51,7 @@ public final class TerraCLI implements Callable<Integer> {
         CLIPlatform platform = new CLIPlatform();
         platform.getEventManager().callEvent(new PlatformInitializationEvent());
 
-        ConfigPack generate = platform.getConfigRegistry().getByID(pack).orElseThrow();
+        ConfigPack generate = platform.getConfigRegistry().getByID(pack).collectThrow(RuntimeException::new);
 
         CLIWorld world = new CLIWorld(size, seed, maxHeight, minHeight, generate, noSave);
 

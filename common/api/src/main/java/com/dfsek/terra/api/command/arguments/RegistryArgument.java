@@ -1,5 +1,7 @@
 package com.dfsek.terra.api.command.arguments;
 
+import com.dfsek.terra.api.util.generic.data.types.Maybe;
+
 import io.leangen.geantyref.TypeToken;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.incendo.cloud.component.CommandComponent;
@@ -100,20 +102,16 @@ public class RegistryArgument {
 
             Registry<R> registry = registryFunction.apply(commandContext);
 
-            Optional<R> result;
-            try {
-                result = registry.get(RegistryKey.parse(input));
-            } catch(IllegalArgumentException e) {
-                try {
-                    result = registry.getByID(input);
-                } catch(IllegalArgumentException e1) {
-                    return ArgumentParseResult.failure(e1);
-                }
-            }
-
-            return result
+            String finalInput = input;
+            return registry.get(RegistryKey.parse(input))
                 .map(ArgumentParseResult::success)
-                .orElse(ArgumentParseResult.failure(new NoSuchEntryException("No such entry: " + input)));
+                .orJust(() ->
+                    registry.getByID(finalInput).collect(
+                        left -> ArgumentParseResult.failure(new IllegalArgumentException(left)),
+                        ArgumentParseResult::success
+                    ))
+                .get(() -> ArgumentParseResult.failure(new NoSuchEntryException("No such entry: " + finalInput)));
+
         }
 
         @Override

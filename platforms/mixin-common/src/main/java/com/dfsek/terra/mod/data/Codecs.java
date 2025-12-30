@@ -31,7 +31,7 @@ public final class Codecs {
             .apply(config, config.stable(id -> CommonPlatform.get()
                 .getConfigRegistry()
                 .get(id)
-                .orElseThrow(() -> new IllegalArgumentException(
+                .orThrow(() -> new IllegalArgumentException(
                     "No such config pack " +
                     id)))));
 

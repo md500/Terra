@@ -51,9 +51,9 @@ public interface Either<L, R> extends Monad<R, Either<?, ?>>, BiFunctor<L, R, Ei
     @Override
     <R1> Either<L, R1> mapRight(Function<R, R1> f);
 
-    Optional<L> getLeft();
+    Maybe<L> getLeft();
 
-    Optional<R> getRight();
+    Maybe<R> getRight();
 
     boolean isLeft();
 
@@ -62,6 +62,11 @@ public interface Either<L, R> extends Monad<R, Either<?, ?>>, BiFunctor<L, R, Ei
     Either<R, L> flip();
 
     <U> U collect(Function<L, U> left, Function<R, U> right);
+
+    @SuppressWarnings("Convert2MethodRef")
+    default <T extends Throwable> R collectThrow(Function<L, T> left) throws T{
+        return mapLeft(left).collect(l -> FunctionUtils.sneakyThrow(l), Function.identity());
+    }
 
     @SuppressWarnings({ "unchecked" })
     @NotNull
@@ -87,13 +92,13 @@ public interface Either<L, R> extends Monad<R, Either<?, ?>>, BiFunctor<L, R, Ei
             }
 
             @Override
-            public Optional<L> getLeft() {
-                return Optional.of(value);
+            public Maybe<L> getLeft() {
+                return Maybe.just(value);
             }
 
             @Override
-            public Optional<R> getRight() {
-                return Optional.empty();
+            public Maybe<R> getRight() {
+                return Maybe.nothing();
             }
 
             @Override
@@ -142,13 +147,13 @@ public interface Either<L, R> extends Monad<R, Either<?, ?>>, BiFunctor<L, R, Ei
             }
 
             @Override
-            public Optional<L> getLeft() {
-                return Optional.empty();
+            public Maybe<L> getLeft() {
+                return Maybe.nothing();
             }
 
             @Override
-            public Optional<R> getRight() {
-                return Optional.of(value);
+            public Maybe<R> getRight() {
+                return Maybe.just(value);
             }
 
             @Override
