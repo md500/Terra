@@ -26,7 +26,11 @@ import com.dfsek.tectonic.api.config.template.object.ObjectTemplate;
 import com.dfsek.tectonic.api.loader.AbstractConfigLoader;
 import com.dfsek.tectonic.api.loader.ConfigLoader;
 import com.dfsek.tectonic.api.loader.type.TypeLoader;
+import com.dfsek.tectonic.impl.loading.object.ObjectTemplateLoader;
 import com.dfsek.tectonic.yaml.YamlConfiguration;
+
+import com.dfsek.terra.api.tectonic.ConfigLoadingDelegate;
+
 import com.google.common.collect.ListMultimap;
 import com.google.common.collect.Multimaps;
 import org.jetbrains.annotations.NotNull;
@@ -47,9 +51,11 @@ import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.ServiceLoader.Provider;
 import java.util.Set;
 import java.util.TreeMap;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.function.Consumer;
 import java.util.function.Supplier;
 
 import com.dfsek.terra.api.Platform;
@@ -99,6 +105,7 @@ public class ConfigPackImpl implements ConfigPack {
 
     private final AbstractConfigLoader abstractConfigLoader = new AbstractConfigLoader();
     private final ConfigLoader selfLoader = new ConfigLoader();
+    private final Map<Type, TypeLoader<?>> loaders = new HashMap<>();
     private final Platform platform;
     private final Path rootPath;
 
@@ -107,7 +114,7 @@ public class ConfigPackImpl implements ConfigPack {
     private final BiomeProvider seededBiomeProvider;
 
     private final Map<Type, CheckedRegistryImpl<?>> registryMap = new HashMap<>();
-    private final Map<Type, ShortcutHolder<?>> shortcuts = new HashMap<>();
+    private final Map<Type, Supplier<ShortcutHolder<?>>> shortcuts = new HashMap<>();
 
     private final OpenRegistry<ConfigType<?, ?>> configTypeRegistry;
     private final TreeMap<Integer, List<Pair<RegistryKey, ConfigType<?, ?>>>> configTypes = new TreeMap<>();
@@ -142,10 +149,7 @@ public class ConfigPackImpl implements ConfigPack {
         this.platform = platform;
         this.configTypeRegistry = createConfigRegistry();
 
-        register(selfLoader);
         platform.register(selfLoader);
-
-        register(abstractConfigLoader);
         platform.register(abstractConfigLoader);
 
         ConfigPackAddonsTemplate addonsTemplate = new ConfigPackAddonsTemplate();
@@ -162,6 +166,9 @@ public class ConfigPackImpl implements ConfigPack {
 
         platform.getEventManager().callEvent(
             new ConfigPackPreLoadEvent(this, template -> selfLoader.load(template, packManifest)));
+
+        register(selfLoader);
+        register(abstractConfigLoader);
 
         selfLoader.load(template, packManifest);
 
@@ -259,6 +266,7 @@ public class ConfigPackImpl implements ConfigPack {
     public <T> ConfigPackImpl applyLoader(Type type, TypeLoader<T> loader) {
         abstractConfigLoader.registerLoader(type, loader);
         selfLoader.registerLoader(type, loader);
+        loaders.put(type, loader);
         return this;
     }
 
@@ -266,6 +274,7 @@ public class ConfigPackImpl implements ConfigPack {
     public <T> ConfigPackImpl applyLoader(Type type, Supplier<ObjectTemplate<T>> loader) {
         abstractConfigLoader.registerLoader(type, loader);
         selfLoader.registerLoader(type, loader);
+        loaders.put(type, new ObjectTemplateLoader<>(loader));
         return this;
     }
 
@@ -273,7 +282,7 @@ public class ConfigPackImpl implements ConfigPack {
     public void register(TypeRegistry registry) {
         registry.registerLoader(ConfigType.class, configTypeRegistry);
         registryMap.forEach(registry::registerLoader);
-        shortcuts.forEach(registry::registerLoader); // overwrite with delegated shortcuts if present
+        shortcuts.forEach((k, v) -> registry.registerLoader(k, v.get())); // overwrite with delegated shortcuts if present
     }
 
     @Override
@@ -357,11 +366,9 @@ public class ConfigPackImpl implements ConfigPack {
     @SuppressWarnings("rawtypes")
     @Override
     public <T> ConfigPack registerShortcut(TypeKey<T> clazz, String shortcut, ShortcutLoader<T> loader) {
-        ShortcutHolder<?> holder = shortcuts
-            .computeIfAbsent(clazz.getType(), c -> new ShortcutHolder<>(getOrCreateRegistry(clazz)))
-            .register(shortcut, (ShortcutLoader) loader);
-        selfLoader.registerLoader(clazz.getType(), holder);
-        abstractConfigLoader.registerLoader(clazz.getType(), holder);
+        shortcuts.put(clazz.getType(),
+            () -> new ShortcutHolder<>(loaders.computeIfAbsent(clazz.getType(), t -> getOrCreateRegistry(clazz))).register(shortcut,
+                (ShortcutLoader) loader));
         return this;
     }
 
