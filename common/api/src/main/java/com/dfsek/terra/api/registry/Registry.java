@@ -43,7 +43,7 @@ public interface Registry<T> extends TypeLoader<T> {
     Maybe<T> get(@NotNull RegistryKey key);
 
     default Either<Invalid, T> getEither(@NotNull RegistryKey key) {
-        return get(key).toEither(new NoSuchElement("No such element " + key.toString()));
+        return get(key).toEither(new NoSuchElement("No such element " + key));
     }
 
     /**
@@ -96,7 +96,7 @@ public interface Registry<T> extends TypeLoader<T> {
 
     default Either<Invalid, T> getByID(String id) {
         return getByID(id, map -> {
-            if(map.isEmpty()) return Either.left(new NoSuchElement("No such value + \"" + id + "\""));
+            if(map.isEmpty()) return Either.left(new NoSuchElement("No such value \"" + id + "\""));
             if(map.size() == 1) {
                 return Either.right(map.values().stream().findFirst().get()); // only one value.
             }
