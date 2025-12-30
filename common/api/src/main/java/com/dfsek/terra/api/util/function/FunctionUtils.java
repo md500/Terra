@@ -22,4 +22,14 @@ public final class FunctionUtils {
         return (Either<L, T>) o.map(Either::right).orElseGet(() -> Either.left(de));
     }
 
+    public static <T, U> Function<T, Either<Exception, U>> liftTry(Function<T, U> f) {
+        return s -> {
+            try {
+                return Either.right(f.apply(s));
+            } catch(Exception e) {
+                return Either.left(e);
+            }
+        };
+    }
+
 }
