@@ -35,8 +35,7 @@ public class ShortcutHolder<T> implements TypeLoader<T> {
     @Override
     public T load(@NotNull AnnotatedType annotatedType, @NotNull Object o, @NotNull ConfigLoader configLoader, DepthTracker depthTracker)
     throws LoadException {
-        String id = (String) o;
-        if(id.contains(":")) {
+        if(o instanceof String id && id.contains(":")) {
             String shortcut = id.substring(0, id.indexOf(":"));
             if(shortcuts.containsKey(shortcut)) {
                 return shortcuts.get(shortcut).load(configLoader, id.substring(id.indexOf(":") + 1),
