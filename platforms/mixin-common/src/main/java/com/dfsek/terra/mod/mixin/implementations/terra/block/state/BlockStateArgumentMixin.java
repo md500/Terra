@@ -56,17 +56,17 @@ public abstract class BlockStateArgumentMixin implements Predicate<CachedBlockPo
     }
 
     @Intrinsic
-    public BlockType terra$getBlockType() {
+    public BlockType terra$blockType() {
         return ((com.dfsek.terra.api.block.state.BlockState) getBlockState()).blockType();
     }
 
     @Intrinsic
-    public String terra$getAsString(boolean properties) {
+    public String terra$asString(boolean properties) {
         return ((com.dfsek.terra.api.block.state.BlockState) getBlockState()).asString(properties);
     }
 
     @Intrinsic
-    public boolean terra$isAir() {
+    public boolean terra$air() {
         return ((com.dfsek.terra.api.block.state.BlockState) getBlockState()).air();
     }
 
