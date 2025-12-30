@@ -25,17 +25,17 @@ public class CLIBlockType implements BlockType {
     }
 
     @Override
-    public BlockState getDefaultState() {
+    public BlockState defaultState() {
         return defaultState.value();
     }
 
     @Override
-    public boolean isSolid() {
+    public boolean solid() {
         return solid;
     }
 
     @Override
-    public boolean isWater() {
+    public boolean water() {
         return water;
     }
 }

@@ -26,7 +26,7 @@ public class CloudCommandSender implements CommandSender {
     }
 
     @Override
-    public Maybe<Entity> getEntity() {
+    public Maybe<Entity> entity() {
         if(delegate instanceof org.bukkit.entity.Entity entity) {
             return Maybe.just(BukkitAdapter.adapt(entity));
         }
@@ -34,7 +34,7 @@ public class CloudCommandSender implements CommandSender {
     }
 
     @Override
-    public Maybe<Player> getPlayer() {
+    public Maybe<Player> player() {
         if(delegate instanceof org.bukkit.entity.Player player) {
             return Maybe.just(BukkitAdapter.adapt(player));
         }

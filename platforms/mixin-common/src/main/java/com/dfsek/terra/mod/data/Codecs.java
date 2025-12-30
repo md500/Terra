@@ -18,7 +18,7 @@ public final class Codecs {
     public static final Codec<RegistryKey> TERRA_REGISTRY_KEY = RecordCodecBuilder
         .create(registryKey -> registryKey.group(Codec.STRING.fieldOf("namespace")
                     .stable()
-                    .forGetter(RegistryKey::getNamespace),
+                    .forGetter(RegistryKey::namespace),
                 Codec.STRING.fieldOf("id")
                     .stable()
                     .forGetter(RegistryKey::getID))

@@ -33,7 +33,7 @@ public class ApiAddonLoader implements BootstrapBaseAddon<BaseAddon> {
     }
 
     @Override
-    public Version getVersion() {
+    public Version version() {
         return VERSION;
     }
 }

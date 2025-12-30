@@ -1,7 +1,5 @@
 package com.dfsek.terra.api.command.arguments;
 
-import com.dfsek.terra.api.util.generic.data.types.Maybe;
-
 import io.leangen.geantyref.TypeToken;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.incendo.cloud.component.CommandComponent;
@@ -14,7 +12,6 @@ import org.incendo.cloud.parser.ParserDescriptor;
 import org.incendo.cloud.suggestion.Suggestion;
 import org.incendo.cloud.suggestion.SuggestionProvider;
 
-import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
 import java.util.function.Function;
 import java.util.stream.Collectors;
@@ -103,15 +100,19 @@ public class RegistryArgument {
             Registry<R> registry = registryFunction.apply(commandContext);
 
             String finalInput = input;
-            return registry.get(RegistryKey.parse(input))
-                .map(ArgumentParseResult::success)
-                .orJust(() ->
-                    registry.getByID(finalInput).collect(
-                        left -> ArgumentParseResult.failure(new IllegalArgumentException(left)),
-                        ArgumentParseResult::success
-                    ))
-                .get(() -> ArgumentParseResult.failure(new NoSuchEntryException("No such entry: " + finalInput)));
+            try {
+                return registry.get(RegistryKey.parse(input))
+                    .map(ArgumentParseResult::success)
+                    .orJust(() ->
+                        registry.getByID(finalInput).collect(
+                            left -> ArgumentParseResult.failure(new IllegalArgumentException(left)),
+                            ArgumentParseResult::success
+                        ))
+                    .get(() -> ArgumentParseResult.failure(new NoSuchEntryException("No such entry: " + finalInput)));
+            } catch(IllegalArgumentException e) {
+                return ArgumentParseResult.failure(e);
 
+            }
         }
 
         @Override

@@ -31,7 +31,7 @@ public class VanillaScatteredOre extends VanillaOre {
 
         for(int j = 0; j < i; ++j) {
             this.setPos(mutable, random, location, Math.min(j, spread));
-            BlockType block = world.getBlockState(mutable).getBlockType();
+            BlockType block = world.getBlockState(mutable).blockType();
             if(shouldPlace(getReplaceable(), block, exposed, random, world, mutable.getX(), mutable.getY(), mutable.getZ())) {
                 world.setBlockState(mutable, getMaterial(block), isApplyGravity());
             }

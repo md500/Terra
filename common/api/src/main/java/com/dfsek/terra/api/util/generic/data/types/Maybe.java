@@ -49,10 +49,10 @@ public interface Maybe<T> extends Monad<T, Maybe<?>> {
         return this;
     }
 
-    default <T1> Maybe<T1> overwrite(Maybe<T1> m) {
-        return bind(ignore -> m);
-    }
 
+    /**
+     * Project a new value into this Maybe if it is Nothing.
+     */
     Maybe<T> or(Supplier<Maybe<T>> or);
 
     default Maybe<T> orJust(Supplier<T> or) {

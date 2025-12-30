@@ -48,7 +48,7 @@ public class PullFunction implements Function<Void> {
         Vector3.Mutable mutable = Vector3.of(FloatingPointFunctions.round(xz.getX()), y.apply(implementationArguments, scope).intValue(),
             FloatingPointFunctions.round(xz.getZ())).mutable().add(arguments.getOrigin().toFloat());
         while(mutable.getY() > arguments.getWorld().getMinHeight()) {
-            if(!arguments.getWorld().getBlockState(mutable).isAir()) {
+            if(!arguments.getWorld().getBlockState(mutable).air()) {
                 arguments.getWorld().setBlockState(mutable, data);
                 break;
             }

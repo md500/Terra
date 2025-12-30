@@ -46,7 +46,7 @@ public class BlockStateSet extends HashSet<BlockType> {
     }
 
     private void add(BlockState data) {
-        add(data.getBlockType());
+        add(data.blockType());
     }
 
     private static final class Singleton extends BlockStateSet {

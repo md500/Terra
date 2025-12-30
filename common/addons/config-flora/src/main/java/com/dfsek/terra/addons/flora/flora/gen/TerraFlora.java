@@ -55,7 +55,7 @@ public class TerraFlora implements Structure {
 
     private void test(EnumSet<Direction> faces, Direction f, Vector3Int b, WritableWorld world) {
         if(testRotation.contains(
-            world.getBlockState(b.getX() + f.getModX(), b.getY() + f.getModY(), b.getZ() + f.getModZ()).getBlockType()))
+            world.getBlockState(b.getX() + f.getModX(), b.getY() + f.getModY(), b.getZ() + f.getModZ()).blockType()))
             faces.add(f);
     }
 

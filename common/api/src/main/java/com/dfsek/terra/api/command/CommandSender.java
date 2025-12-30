@@ -16,7 +16,7 @@ import com.dfsek.terra.api.util.generic.data.types.Maybe;
 public interface CommandSender extends Handle {
     void sendMessage(String message);
 
-    Maybe<Entity> getEntity();
+    Maybe<Entity> entity();
 
-    Maybe<Player> getPlayer();
+    Maybe<Player> player();
 }

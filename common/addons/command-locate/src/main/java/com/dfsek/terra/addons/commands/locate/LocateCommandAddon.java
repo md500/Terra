@@ -4,7 +4,6 @@ package com.dfsek.terra.addons.commands.locate;
 import com.dfsek.seismic.type.vector.Vector2Int;
 import com.dfsek.seismic.type.vector.Vector3Int;
 
-import com.dfsek.terra.api.util.function.FunctionUtils;
 import com.dfsek.terra.api.util.generic.data.types.Maybe;
 
 import org.incendo.cloud.CommandManager;
@@ -12,8 +11,6 @@ import org.incendo.cloud.component.DefaultValue;
 import org.incendo.cloud.context.CommandContext;
 import org.incendo.cloud.description.Description;
 import org.incendo.cloud.parser.standard.IntegerParser;
-
-import java.util.Optional;
 
 import com.dfsek.terra.addons.manifest.api.AddonInitializer;
 import com.dfsek.terra.api.Platform;
@@ -41,7 +38,7 @@ public class LocateCommandAddon implements AddonInitializer {
     private BaseAddon addon;
 
     private static Registry<Biome> getBiomeRegistry(CommandContext<CommandSender> sender) {
-        return sender.sender().getEntity().orThrow().world().getPack().getRegistry(Biome.class);
+        return sender.sender().entity().orThrow().world().getPack().getRegistry(Biome.class);
     }
 
     @Override
@@ -69,7 +66,7 @@ public class LocateCommandAddon implements AddonInitializer {
                         .handler(context -> {
                             // 1. Gather Context & Arguments
                             Biome targetBiome = context.get("biome");
-                            Entity sender = context.sender().getEntity().orThrow(
+                            Entity sender = context.sender().entity().orThrow(
                                 () -> new Error("Only entities can run this command."));
                             World world = sender.world();
 

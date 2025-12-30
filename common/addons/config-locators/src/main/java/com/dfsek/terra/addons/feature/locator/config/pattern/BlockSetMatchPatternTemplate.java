@@ -26,6 +26,6 @@ public class BlockSetMatchPatternTemplate implements ObjectTemplate<Pattern> {
 
     @Override
     public Pattern get() {
-        return new MatchPattern(offset, blockState -> blocks.contains(blockState.getBlockType()));
+        return new MatchPattern(offset, blockState -> blocks.contains(blockState.blockType()));
     }
 }

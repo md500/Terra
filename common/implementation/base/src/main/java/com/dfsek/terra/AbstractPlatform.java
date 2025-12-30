@@ -274,7 +274,7 @@ public abstract class AbstractPlatform implements Platform {
                     .append("- ")
                     .append(addon.getID())
                     .append("@")
-                    .append(addon.getVersion().getFormatted());
+                    .append(addon.version().getFormatted());
             }
 
             logger.info(builder.toString());

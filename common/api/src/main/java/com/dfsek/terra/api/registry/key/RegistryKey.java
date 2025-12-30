@@ -41,7 +41,7 @@ public final class RegistryKey implements StringIdentifiable, Namespaced {
     }
 
     @Override
-    public String getNamespace() {
+    public String namespace() {
         return namespace;
     }
 

@@ -57,17 +57,17 @@ public abstract class BlockStateArgumentMixin implements Predicate<CachedBlockPo
 
     @Intrinsic
     public BlockType terra$getBlockType() {
-        return ((com.dfsek.terra.api.block.state.BlockState) getBlockState()).getBlockType();
+        return ((com.dfsek.terra.api.block.state.BlockState) getBlockState()).blockType();
     }
 
     @Intrinsic
     public String terra$getAsString(boolean properties) {
-        return ((com.dfsek.terra.api.block.state.BlockState) getBlockState()).getAsString(properties);
+        return ((com.dfsek.terra.api.block.state.BlockState) getBlockState()).asString(properties);
     }
 
     @Intrinsic
     public boolean terra$isAir() {
-        return ((com.dfsek.terra.api.block.state.BlockState) getBlockState()).isAir();
+        return ((com.dfsek.terra.api.block.state.BlockState) getBlockState()).air();
     }
 
     @SuppressWarnings({ "ConstantValue", "DataFlowIssue", "EqualsBetweenInconvertibleTypes" })
@@ -79,12 +79,12 @@ public abstract class BlockStateArgumentMixin implements Predicate<CachedBlockPo
 
     @SuppressWarnings("DataFlowIssue")
     @Intrinsic
-    public ExtendedData terra$getData() {
+    public ExtendedData terra$data() {
         return ((ExtendedData) ((Object) data));
     }
 
     @Intrinsic
-    public com.dfsek.terra.api.block.state.BlockState terra$getState() {
+    public com.dfsek.terra.api.block.state.BlockState terra$state() {
         return (com.dfsek.terra.api.block.state.BlockState) getBlockState();
     }
 

@@ -21,12 +21,12 @@ public class VanillaOreUtils {
         if(!replaceable.contains(type)) return false;
         if(shouldExpose(random, exposedChance)) return true; // Exposed blocks can be placed regardless of adjacency to air
         // Adjacency is checked after determining not exposed rather than vice-versa, assuming block checks are more expensive
-        boolean adjacentAir = world.getBlockState(x, y, z - 1).isAir() ||
-                              world.getBlockState(x, y, z + 1).isAir() ||
-                              world.getBlockState(x, y - 1, z).isAir() ||
-                              world.getBlockState(x, y + 1, z).isAir() ||
-                              world.getBlockState(x - 1, y, z).isAir() ||
-                              world.getBlockState(x + 1, y, z).isAir();
+        boolean adjacentAir = world.getBlockState(x, y, z - 1).air() ||
+                              world.getBlockState(x, y, z + 1).air() ||
+                              world.getBlockState(x, y - 1, z).air() ||
+                              world.getBlockState(x, y + 1, z).air() ||
+                              world.getBlockState(x - 1, y, z).air() ||
+                              world.getBlockState(x + 1, y, z).air();
         return !adjacentAir; // Exposed check did not pass earlier so only blocks not adjacent air should place
     }
 }

@@ -76,7 +76,7 @@ public class BlockFunction implements Function<Void> {
                 y.apply(implementationArguments, scope).doubleValue(),
                 FloatingPointFunctions.round(xz.getZ())).mutable().add(arguments.getOrigin().toFloat());
             BlockState current = arguments.getWorld().getBlockState(set);
-            if(overwrite.apply(implementationArguments, scope) || current.isAir()) {
+            if(overwrite.apply(implementationArguments, scope) || current.air()) {
                 arguments.getWorld().setBlockState(set, rot, physics.apply(implementationArguments, scope));
             }
         } catch(RuntimeException e) {

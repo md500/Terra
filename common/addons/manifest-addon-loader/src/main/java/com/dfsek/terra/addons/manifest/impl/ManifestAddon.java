@@ -66,12 +66,12 @@ public class ManifestAddon implements BaseAddon {
     }
 
     @Override
-    public Map<String, VersionRange> getDependencies() {
+    public Map<String, VersionRange> dependencies() {
         return manifest.getDependencies();
     }
 
     @Override
-    public Version getVersion() {
+    public Version version() {
         return manifest.getVersion();
     }
 }

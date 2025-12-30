@@ -149,7 +149,7 @@ public class VanillaOre implements Structure {
                                         if(!visited.get(index)) { // Skip blocks that have already been visited
 
                                             visited.set(index);
-                                            BlockType block = world.getBlockState(xi, yi, zi).getBlockType();
+                                            BlockType block = world.getBlockState(xi, yi, zi).blockType();
                                             if(shouldPlace(getReplaceable(), block, exposed, random, world, xi, yi, zi)) {
                                                 world.setBlockState(xi, yi, zi, getMaterial(block), isApplyGravity());
                                                 ++blockCount;

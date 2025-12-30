@@ -4,7 +4,7 @@ contributors:
 id: shortcut-blockstate-fallback
 version: @VERSION@
 entrypoints:
-  - "com.dfsek.terra.addons.shortcut.blockstate.ShortcutBlockstateFallbackAddon"
+  - "com.dfsek.terra.addons.shortcut.blockstate.ShortcutBlockStateFallbackAddon"
 website:
   issues: https://github.com/PolyhedralDev/Terra/issues
   source: https://github.com/PolyhedralDev/Terra

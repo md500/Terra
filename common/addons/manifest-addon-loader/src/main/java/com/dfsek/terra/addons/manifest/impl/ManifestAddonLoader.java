@@ -132,7 +132,7 @@ public class ManifestAddonLoader implements BootstrapBaseAddon<ManifestAddon> {
     }
 
     @Override
-    public Version getVersion() {
+    public Version version() {
         return VERSION;
     }
 }
