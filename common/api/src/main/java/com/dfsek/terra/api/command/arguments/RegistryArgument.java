@@ -105,7 +105,7 @@ public class RegistryArgument {
                     .map(ArgumentParseResult::success)
                     .orJust(() ->
                         registry.getByID(finalInput).collect(
-                            left -> ArgumentParseResult.failure(new IllegalArgumentException(left)),
+                            left -> ArgumentParseResult.failure(left.toIllegal()),
                             ArgumentParseResult::success
                         ))
                     .get(() -> ArgumentParseResult.failure(new NoSuchEntryException("No such entry: " + finalInput)));

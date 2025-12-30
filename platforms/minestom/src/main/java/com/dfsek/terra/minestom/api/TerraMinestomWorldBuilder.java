@@ -1,5 +1,7 @@
 package com.dfsek.terra.minestom.api;
 
+import com.dfsek.terra.api.error.Invalid;
+
 import net.minestom.server.instance.Instance;
 import net.minestom.server.registry.RegistryKey;
 import net.minestom.server.world.DimensionType;
@@ -39,7 +41,7 @@ public class TerraMinestomWorldBuilder {
     }
 
     public TerraMinestomWorldBuilder packById(String id) {
-        this.pack = platform.getConfigRegistry().getByID(id).collectThrow(RuntimeException::new);
+        this.pack = platform.getConfigRegistry().getByID(id).collectThrow(Invalid::toIllegal);
         return this;
     }
 

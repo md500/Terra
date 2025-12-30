@@ -17,6 +17,8 @@
 
 package registry;
 
+import com.dfsek.terra.api.error.Invalid;
+import com.dfsek.terra.api.error.InvalidLookup;
 import com.dfsek.terra.api.util.generic.data.types.Either;
 
 import org.junit.jupiter.api.Test;
@@ -78,7 +80,7 @@ public class RegistryTest {
 
         test.register(RegistryKey.parse("test:test"), "bazinga");
 
-        assertEquals(test.getByID("test").collectThrow(RuntimeException::new), "bazinga");
+        assertEquals(test.getByID("test").collectThrow(Invalid::toIllegal), "bazinga");
     }
 
     @Test
@@ -88,7 +90,7 @@ public class RegistryTest {
         test.registerChecked(RegistryKey.parse("test:test"), "bazinga");
         test.registerChecked(RegistryKey.parse("test2:test"), "bazinga");
 
-        Either<String, String> result = test.getByID("test");
+        Either<InvalidLookup, String> result = test.getByID("test");
         assertTrue(result.isLeft());
 
     }

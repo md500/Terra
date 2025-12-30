@@ -1,6 +1,9 @@
 package com.dfsek.terra.cli;
 
 import com.dfsek.seismic.type.vector.Vector2Int;
+
+import com.dfsek.terra.api.error.Invalid;
+
 import net.querz.mca.MCAUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -51,7 +54,7 @@ public final class TerraCLI implements Callable<Integer> {
         CLIPlatform platform = new CLIPlatform();
         platform.getEventManager().callEvent(new PlatformInitializationEvent());
 
-        ConfigPack generate = platform.getConfigRegistry().getByID(pack).collectThrow(RuntimeException::new);
+        ConfigPack generate = platform.getConfigRegistry().getByID(pack).collectThrow(Invalid::toIllegal);
 
         CLIWorld world = new CLIWorld(size, seed, maxHeight, minHeight, generate, noSave);
 

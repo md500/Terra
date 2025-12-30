@@ -9,6 +9,9 @@ package com.dfsek.terra.api.registry;
 
 import com.dfsek.tectonic.api.loader.type.TypeLoader;
 
+import com.dfsek.terra.api.error.InvalidLookup;
+import com.dfsek.terra.api.error.InvalidLookup.AmbiguousKey;
+import com.dfsek.terra.api.error.InvalidLookup.NoSuchElement;
 import com.dfsek.terra.api.util.generic.data.types.Either;
 import com.dfsek.terra.api.util.generic.data.types.Maybe;
 
@@ -86,17 +89,17 @@ public interface Registry<T> extends TypeLoader<T> {
         return getType().getRawType();
     }
 
-    default Either<String, T> getByID(String id) {
+    default Either<InvalidLookup, T> getByID(String id) {
         return getByID(id, map -> {
-            if(map.isEmpty()) return Either.left("No such element.");
+            if(map.isEmpty()) return Either.left(new NoSuchElement("No such value + \"" + id + "\""));
             if(map.size() == 1) {
                 return Either.right(map.values().stream().findFirst().get()); // only one value.
             }
-            return Either.<String, T>left("ID \"" + id + "\" is ambiguous; matches: " + map
+            return Either.left(new AmbiguousKey("ID \"" + id + "\" is ambiguous; matches: " + map
                 .keySet()
                 .stream()
                 .map(RegistryKey::toString)
-                .reduce("", (a, b) -> a + "\n - " + b));
+                .reduce("", (a, b) -> a + "\n - " + b)));
         });
     }
 
@@ -106,9 +109,9 @@ public interface Registry<T> extends TypeLoader<T> {
 
     Map<RegistryKey, T> getMatches(String id);
 
-    default Either<String, T> getByID(String attempt, Function<Map<RegistryKey, T>, Either<String, T>> reduction) {
+    default Either<InvalidLookup, T> getByID(String attempt, Function<Map<RegistryKey, T>, Either<InvalidLookup, T>> reduction) {
         if(attempt.contains(":")) {
-            return get(RegistryKey.parse(attempt)).toEither("No such value.");
+            return get(RegistryKey.parse(attempt)).toEither(new NoSuchElement("No such value + \"" + attempt + "\""));
         }
         return reduction.apply(getMatches(attempt));
     }
