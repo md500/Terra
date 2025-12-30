@@ -41,7 +41,6 @@ public class ShortcutHolder<T> implements TypeLoader<T> {
                 return shortcuts.get(shortcut).load(configLoader, id.substring(id.indexOf(":") + 1),
                     depthTracker.intrinsic("Using shortcut \"" + shortcut + "\""));
             }
-            throw new LoadException("Shortcut \"" + shortcut + "\" is not defined.", depthTracker);
         }
         return back.load(annotatedType, o, configLoader, depthTracker);
     }
