@@ -22,6 +22,10 @@ public final class FunctionUtils {
         return (Either<L, T>) o.map(Either::right).orElseGet(() -> Either.left(de));
     }
 
+    public static <T> T collapse(Either<T, T> either) {
+        return either.collect(Function.identity(), Function.identity());
+    }
+
     public static <T, U> Function<T, Either<Exception, U>> liftTry(Function<T, U> f) {
         return s -> {
             try {

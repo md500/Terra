@@ -3,6 +3,10 @@ package com.dfsek.terra.addons.commands.locate;
 
 import com.dfsek.seismic.type.vector.Vector2Int;
 import com.dfsek.seismic.type.vector.Vector3Int;
+
+import com.dfsek.terra.api.util.function.FunctionUtils;
+import com.dfsek.terra.api.util.generic.data.types.Maybe;
+
 import org.incendo.cloud.CommandManager;
 import org.incendo.cloud.component.DefaultValue;
 import org.incendo.cloud.context.CommandContext;
@@ -25,6 +29,8 @@ import com.dfsek.terra.api.util.generic.data.types.Either;
 import com.dfsek.terra.api.util.reflection.TypeKey;
 import com.dfsek.terra.api.world.World;
 import com.dfsek.terra.api.world.biome.Biome;
+
+import static com.dfsek.terra.api.util.function.FunctionUtils.collapse;
 
 
 public class LocateCommandAddon implements AddonInitializer {
@@ -83,7 +89,7 @@ public class LocateCommandAddon implements AddonInitializer {
                             context.sender().sendMessage(
                                 "Searching for " + targetBiome.getID() + " within " + radius + " blocks" + modeMsg + "...");
 
-                            Optional<Either<Vector3Int, Vector2Int>> result;
+                            Maybe<Either<Vector3Int, Vector2Int>> result;
 
                             // 3. Execute Search Loop
                             while(true) {
@@ -100,7 +106,7 @@ public class LocateCommandAddon implements AddonInitializer {
 
                                 // Exit Conditions:
                                 // 1. Found a result
-                                if(result.isPresent()) {
+                                if(result.isJust()) {
                                     break;
                                 }
                                 // 2. Not in auto mode (only run once)
@@ -118,22 +124,11 @@ public class LocateCommandAddon implements AddonInitializer {
                             }
 
                             // 4. Handle Result
-                            if(result.isPresent()) {
-                                Either<Vector3Int, Vector2Int> location = result.get();
-                                String coords;
-
-                                if(location.hasLeft()) { // 3D Result
-                                    Vector3Int vec = location.getLeft().get();
-                                    coords = String.format("%d, %d, %d", vec.getX(), vec.getY(), vec.getZ());
-                                } else { // 2D Result
-                                    Vector2Int vec = location.getRight().get();
-                                    coords = String.format("%d, ~, %d", vec.getX(), vec.getZ());
-                                }
-
-                                context.sender().sendMessage("Found " + targetBiome.getID() + " at [" + coords + "]");
-                            } else {
-                                context.sender().sendMessage("Could not find " + targetBiome.getID() + " within " + radius + " blocks.");
-                            }
+                            context.sender().sendMessage(collapse(result.map(location -> location.collect(
+                                    left -> String.format("%d, %d, %d", left.getX(), left.getY(), left.getZ()),
+                                    right -> String.format("%d, ~, %d", right.getX(), right.getZ())))
+                                .map(coords -> "Found " + targetBiome.getID() + " at [" + coords + "]")
+                                .toEither("Could not find " + targetBiome.getID() + " within " + radius + " blocks.")));
                         })
                         .permission("terra.locate.biome")
                 );
