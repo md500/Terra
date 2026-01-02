@@ -37,14 +37,6 @@ public record Pair<L, R>(L left, R right) implements BiFunctor<L, R, Pair<?, ?>>
         return pair -> predicate.test(pair.right);
     }
 
-    public static <L, R> Function<Pair<L, R>, R> unwrapRight() {
-        return pair -> pair.right;
-    }
-
-    public static <L, R> Function<Pair<L, R>, L> unwrapLeft() {
-        return pair -> pair.left;
-    }
-
     @Contract("_, _ -> new")
     public static <L1, R1> Pair<L1, R1> of(L1 left, R1 right) {
         return new Pair<>(left, right);

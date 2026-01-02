@@ -330,7 +330,7 @@ public abstract class AbstractPlatform implements Platform {
                 .stream()
                 .filter(Pair.testRight(s -> s.contains(".")))
                 .map(p -> p.mapRight(s -> s.substring(0, s.lastIndexOf('.')))) // remove major version
-                .map(Pair.unwrapRight())
+                .map(Pair::right)
                 .collect(Collectors.toSet());
 
 
@@ -369,7 +369,7 @@ public abstract class AbstractPlatform implements Platform {
                                .anyMatch(resourcePath::startsWith) && // if any share name
                            paths
                                .stream()
-                               .map(Pair.unwrapRight())
+                               .map(Pair::right)
                                .noneMatch(resourcePath::startsWith)) { // but dont share major version
                             logger.warn(
                                 "Addon {} has a new major version available. It will not be automatically updated; you will need to " +
