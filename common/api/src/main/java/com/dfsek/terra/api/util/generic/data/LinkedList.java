@@ -17,7 +17,7 @@ public sealed interface LinkedList<T> extends Monad<T, LinkedList<?>>, Monoid<T,
 
     @Override
     default <T1> LinkedList<T1> pure(T1 t) {
-        return new Cons<>(t, empty());
+        return of(t);
     }
 
     @Override
@@ -32,11 +32,17 @@ public sealed interface LinkedList<T> extends Monad<T, LinkedList<?>>, Monoid<T,
         return get(0);
     }
 
+    LinkedList<T> tail();
+
     int length();
 
     Maybe<T> get(int index);
 
     LinkedList<T> add(T value);
+
+    default LinkedList<T> prepend(T value) {
+        return new Cons<>(value, this);
+    }
 
     <C extends Collection<T>> C toCollection(C collection);
 
@@ -113,6 +119,11 @@ public sealed interface LinkedList<T> extends Monad<T, LinkedList<?>>, Monoid<T,
         @SuppressWarnings("unchecked")
         public <U> LinkedList<U> map(Function<T, U> map) {
             return (LinkedList<U>) this;
+        }
+
+        @Override
+        public LinkedList<T> tail() {
+            return this;
         }
 
         @Override
