@@ -71,7 +71,7 @@ import com.dfsek.terra.api.registry.OpenRegistry;
 import com.dfsek.terra.api.registry.Registry;
 import com.dfsek.terra.api.registry.key.RegistryKey;
 import com.dfsek.terra.api.tectonic.ShortcutLoader;
-import com.dfsek.terra.api.util.generic.pair.Pair;
+import com.dfsek.terra.api.util.generic.data.types.Pair;
 import com.dfsek.terra.api.util.reflection.ReflectionUtil;
 import com.dfsek.terra.api.util.reflection.TypeKey;
 import com.dfsek.terra.api.world.biome.generation.BiomeProvider;

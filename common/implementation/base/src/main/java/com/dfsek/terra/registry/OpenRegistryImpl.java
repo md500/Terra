@@ -44,7 +44,7 @@ import java.util.stream.Collectors;
 import com.dfsek.terra.api.registry.OpenRegistry;
 import com.dfsek.terra.api.registry.exception.DuplicateEntryException;
 import com.dfsek.terra.api.registry.key.RegistryKey;
-import com.dfsek.terra.api.util.generic.pair.Pair;
+import com.dfsek.terra.api.util.generic.data.types.Pair;
 import com.dfsek.terra.api.util.reflection.TypeKey;
 
 

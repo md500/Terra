@@ -64,7 +64,7 @@ import com.dfsek.terra.api.profiler.Profiler;
 import com.dfsek.terra.api.registry.CheckedRegistry;
 import com.dfsek.terra.api.registry.Registry;
 import com.dfsek.terra.api.registry.key.StringIdentifiable;
-import com.dfsek.terra.api.util.generic.pair.Pair;
+import com.dfsek.terra.api.util.generic.data.types.Pair;
 import com.dfsek.terra.api.util.mutable.MutableBoolean;
 import com.dfsek.terra.api.util.reflection.TypeKey;
 import com.dfsek.terra.config.GenericLoaders;
@@ -308,7 +308,7 @@ public abstract class AbstractPlatform implements Platform {
                 .walk(addonsPath)
                 .map(path -> Pair.of(path, data.relativize(path).toString()))
 
-                .map(Pair.mapRight(s -> {
+                .map(p -> p.mapRight(s -> {
                     if(s.contains("+")) { // remove commit hash
                         return s.substring(0, s.lastIndexOf('+'));
                     }
@@ -316,17 +316,17 @@ public abstract class AbstractPlatform implements Platform {
                 }))
 
                 .filter(Pair.testRight(s -> s.contains("."))) // remove patch version
-                .map(Pair.mapRight(s -> s.substring(0, s.lastIndexOf('.'))))
+                .map(p -> p.mapRight(s -> s.substring(0, s.lastIndexOf('.'))))
 
                 .filter(Pair.testRight(s -> s.contains("."))) // remove minor version
-                .map(Pair.mapRight(s -> s.substring(0, s.lastIndexOf('.'))))
+                .map(p -> p.mapRight(s -> s.substring(0, s.lastIndexOf('.'))))
 
                 .collect(Collectors.toSet());
 
             Set<String> pathsNoMajor = paths
                 .stream()
                 .filter(Pair.testRight(s -> s.contains(".")))
-                .map(Pair.mapRight(s -> s.substring(0, s.lastIndexOf('.')))) // remove major version
+                .map(p -> p.mapRight(s -> s.substring(0, s.lastIndexOf('.')))) // remove major version
                 .map(Pair.unwrapRight())
                 .collect(Collectors.toSet());
 

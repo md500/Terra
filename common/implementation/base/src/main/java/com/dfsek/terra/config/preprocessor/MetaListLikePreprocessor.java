@@ -34,7 +34,7 @@ import java.util.Optional;
 import java.util.Set;
 
 import com.dfsek.terra.api.config.meta.Meta;
-import com.dfsek.terra.api.util.generic.pair.Pair;
+import com.dfsek.terra.api.util.generic.data.types.Pair;
 
 
 public class MetaListLikePreprocessor extends MetaPreprocessor<Meta> {

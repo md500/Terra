@@ -6,13 +6,11 @@ import com.github.benmanes.caffeine.cache.Caffeine;
 import com.github.benmanes.caffeine.cache.LoadingCache;
 import com.github.benmanes.caffeine.cache.Scheduler;
 
-import java.util.Optional;
-
 import com.dfsek.terra.api.Handle;
 import com.dfsek.terra.api.util.cache.SeededVector2Key;
 import com.dfsek.terra.api.util.cache.SeededVector3Key;
-import com.dfsek.terra.api.util.generic.pair.Pair;
-import com.dfsek.terra.api.util.generic.pair.Pair.Mutable;
+import com.dfsek.terra.api.util.generic.data.types.Pair;
+import com.dfsek.terra.api.util.generic.data.types.Pair.Mutable;
 import com.dfsek.terra.api.world.biome.Biome;
 
 import static com.dfsek.terra.api.util.cache.CacheUtils.CACHE_EXECUTOR;

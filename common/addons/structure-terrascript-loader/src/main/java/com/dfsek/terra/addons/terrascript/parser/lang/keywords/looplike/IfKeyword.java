@@ -17,7 +17,7 @@ import com.dfsek.terra.addons.terrascript.parser.lang.Keyword;
 import com.dfsek.terra.addons.terrascript.parser.lang.Returnable;
 import com.dfsek.terra.addons.terrascript.parser.lang.Scope;
 import com.dfsek.terra.addons.terrascript.tokenizer.Position;
-import com.dfsek.terra.api.util.generic.pair.Pair;
+import com.dfsek.terra.api.util.generic.data.types.Pair;
 
 
 public class IfKeyword implements Keyword<Block.ReturnInfo<?>> {

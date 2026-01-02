@@ -27,7 +27,7 @@ import java.lang.reflect.AnnotatedType;
 import java.util.Map;
 
 import com.dfsek.terra.api.config.meta.Meta;
-import com.dfsek.terra.api.util.generic.pair.Pair;
+import com.dfsek.terra.api.util.generic.data.types.Pair;
 
 
 public class MetaValuePreprocessor extends MetaPreprocessor<Meta> {

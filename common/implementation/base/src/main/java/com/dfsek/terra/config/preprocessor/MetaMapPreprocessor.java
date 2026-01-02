@@ -33,7 +33,7 @@ import java.util.Map;
 import java.util.Optional;
 
 import com.dfsek.terra.api.config.meta.Meta;
-import com.dfsek.terra.api.util.generic.pair.Pair;
+import com.dfsek.terra.api.util.generic.data.types.Pair;
 import com.dfsek.terra.api.util.reflection.TypeKey;
 
 

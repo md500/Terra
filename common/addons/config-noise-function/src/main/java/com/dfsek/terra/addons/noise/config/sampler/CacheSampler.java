@@ -8,8 +8,8 @@ import org.jetbrains.annotations.ApiStatus.Experimental;
 
 import com.dfsek.terra.api.util.cache.DoubleSeededVector2Key;
 import com.dfsek.terra.api.util.cache.DoubleSeededVector3Key;
-import com.dfsek.terra.api.util.generic.pair.Pair;
-import com.dfsek.terra.api.util.generic.pair.Pair.Mutable;
+import com.dfsek.terra.api.util.generic.data.types.Pair;
+import com.dfsek.terra.api.util.generic.data.types.Pair.Mutable;
 
 import static com.dfsek.terra.api.util.cache.CacheUtils.CACHE_EXECUTOR;
 

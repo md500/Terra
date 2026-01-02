@@ -5,7 +5,9 @@
  * reference the LICENSE file in the common/api directory.
  */
 
-package com.dfsek.terra.api.util.generic.pair;
+package com.dfsek.terra.api.util.generic.data.types;
+
+import com.dfsek.terra.api.util.generic.data.BiFunctor;
 
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
@@ -17,15 +19,15 @@ import java.util.function.Function;
 import java.util.function.Predicate;
 
 
-public record Pair<L, R>(L left, R right) implements Bifunctor{
+public record Pair<L, R>(L left, R right) implements BiFunctor<L, R, Pair<?, ?>> {
     private static final Pair<?, ?> NULL = new Pair<>(null, null);
 
-    public static <L, R, T> Function<Pair<L, R>, Pair<T, R>> mapLeft(Function<L, T> function) {
-        return pair -> of(function.apply(pair.left), pair.right);
+    public <T> Pair<T, R> mapLeft(Function<L, T> function) {
+        return of(function.apply(left), right);
     }
 
-    public static <L, R, T> Function<Pair<L, R>, Pair<L, T>> mapRight(Function<R, T> function) {
-        return pair -> of(pair.left, function.apply(pair.right));
+    public <T> Pair<L, T> mapRight(Function<R, T> function) {
+        return of(left, function.apply(right));
     }
 
     public static <L> Predicate<Pair<L, ?>> testLeft(Predicate<L> predicate) {

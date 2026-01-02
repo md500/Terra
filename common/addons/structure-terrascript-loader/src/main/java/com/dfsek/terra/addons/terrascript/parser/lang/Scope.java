@@ -5,7 +5,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import com.dfsek.terra.addons.terrascript.parser.lang.Returnable.ReturnType;
-import com.dfsek.terra.api.util.generic.pair.Pair;
+import com.dfsek.terra.api.util.generic.data.types.Pair;
 
 
 public class Scope {
