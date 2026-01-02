@@ -18,6 +18,9 @@
 package com.dfsek.terra;
 
 import com.dfsek.tectonic.api.TypeRegistry;
+
+import com.dfsek.terra.api.util.generic.data.BiFunctor;
+
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
 import org.jetbrains.annotations.NotNull;
@@ -352,7 +355,7 @@ public abstract class AbstractPlatform implements Platform {
                         paths
                             .stream()
                             .filter(Pair.testRight(resourcePath::startsWith))
-                            .forEach(Pair.consumeLeft(path -> {
+                            .forEach(BiFunctor.consumeLeft(path -> {
                                 logger.info("Removing outdated resource {}, replacing with {}", path, resourcePath);
                                 try {
                                     Files.delete(path);

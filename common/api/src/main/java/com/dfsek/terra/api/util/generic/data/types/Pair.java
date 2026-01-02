@@ -14,7 +14,6 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.Objects;
 import java.util.function.BiConsumer;
-import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.Predicate;
 
@@ -30,7 +29,7 @@ public record Pair<L, R>(L left, R right) implements BiFunctor<L, R, Pair<?, ?>>
         return of(left, function.apply(right));
     }
 
-    public static <L> Predicate<Pair<L, ?>> testLeft(Predicate<L> predicate) {
+    public static <L, R> Predicate<Pair<L, R>> testLeft(Predicate<L> predicate) {
         return pair -> predicate.test(pair.left);
     }
 
@@ -38,19 +37,11 @@ public record Pair<L, R>(L left, R right) implements BiFunctor<L, R, Pair<?, ?>>
         return pair -> predicate.test(pair.right);
     }
 
-    public static <L> Consumer<Pair<L, ?>> consumeLeft(Consumer<L> consumer) {
-        return pair -> consumer.accept(pair.left);
-    }
-
-    public static <R> Consumer<Pair<?, R>> consumeRight(Consumer<R> consumer) {
-        return pair -> consumer.accept(pair.right);
-    }
-
-    public static <R> Function<Pair<?, R>, R> unwrapRight() {
+    public static <L, R> Function<Pair<L, R>, R> unwrapRight() {
         return pair -> pair.right;
     }
 
-    public static <L> Function<Pair<L, ?>, L> unwrapLeft() {
+    public static <L, R> Function<Pair<L, R>, L> unwrapLeft() {
         return pair -> pair.left;
     }
 
@@ -73,9 +64,9 @@ public record Pair<L, R>(L left, R right) implements BiFunctor<L, R, Pair<?, ?>>
 
     @Override
     public boolean equals(Object obj) {
-        if(!(obj instanceof Pair<?, ?> that)) return false;
+        if(!(obj instanceof Pair<?, ?>(Object left1, Object right1))) return false;
 
-        return Objects.equals(this.left, that.left) && Objects.equals(this.right, that.right);
+        return Objects.equals(this.left, left1) && Objects.equals(this.right, right1);
     }
 
     public Pair<L, R> apply(BiConsumer<L, R> consumer) {
@@ -109,7 +100,7 @@ public record Pair<L, R>(L left, R right) implements BiFunctor<L, R, Pair<?, ?>>
             return Pair.of(left, right);
         }
 
-        public L getLeft() {
+        public L left() {
             return left;
         }
 
@@ -117,7 +108,7 @@ public record Pair<L, R>(L left, R right) implements BiFunctor<L, R, Pair<?, ?>>
             this.left = left;
         }
 
-        public R getRight() {
+        public R right() {
             return right;
         }
 

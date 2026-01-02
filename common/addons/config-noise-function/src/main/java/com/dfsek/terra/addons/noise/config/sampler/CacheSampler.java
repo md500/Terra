@@ -63,16 +63,16 @@ public class CacheSampler implements Sampler {
     @Override
     public double getSample(long seed, double x, double y) {
         Mutable<DoubleSeededVector2Key, LoadingCache<DoubleSeededVector2Key, Double>> cachePair = cache2D.get();
-        DoubleSeededVector2Key mutableKey = cachePair.getLeft();
+        DoubleSeededVector2Key mutableKey = cachePair.left();
         mutableKey.set(x, y, seed);
-        return cachePair.getRight().get(mutableKey);
+        return cachePair.right().get(mutableKey);
     }
 
     @Override
     public double getSample(long seed, double x, double y, double z) {
         Mutable<DoubleSeededVector3Key, LoadingCache<DoubleSeededVector3Key, Double>> cachePair = cache3D.get();
-        DoubleSeededVector3Key mutableKey = cachePair.getLeft();
+        DoubleSeededVector3Key mutableKey = cachePair.left();
         mutableKey.set(x, y, z, seed);
-        return cachePair.getRight().get(mutableKey);
+        return cachePair.right().get(mutableKey);
     }
 }

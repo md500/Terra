@@ -74,17 +74,17 @@ public class CachingBiomeProvider implements BiomeProvider, Handle {
     @Override
     public Biome getBiome(int x, int y, int z, long seed) {
         Mutable<SeededVector3Key, LoadingCache<SeededVector3Key, Biome>> cachePair = cache.get();
-        SeededVector3Key mutableKey = cachePair.getLeft();
+        SeededVector3Key mutableKey = cachePair.left();
         mutableKey.set(x, y, z, seed);
-        return cachePair.getRight().get(mutableKey);
+        return cachePair.right().get(mutableKey);
     }
 
     @Override
     public Maybe<Biome> getBaseBiome(int x, int z, long seed) {
         Mutable<SeededVector2Key, LoadingCache<SeededVector2Key, Maybe<Biome>>> cachePair = baseCache.get();
-        SeededVector2Key mutableKey = cachePair.getLeft();
+        SeededVector2Key mutableKey = cachePair.left();
         mutableKey.set(x, z, seed);
-        return cachePair.getRight().get(mutableKey);
+        return cachePair.right().get(mutableKey);
     }
 
     @Override
