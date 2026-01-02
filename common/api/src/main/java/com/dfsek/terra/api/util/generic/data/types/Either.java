@@ -21,7 +21,7 @@ import java.util.function.Consumer;
 import java.util.function.Function;
 
 
-public interface Either<L, R> extends Monad<R, Either<?, ?>>, BiFunctor<L, R, Either<?, ?>> {
+public sealed interface Either<L, R> extends Monad<R, Either<?, ?>>, BiFunctor<L, R, Either<?, ?>> {
     default Either<L, R> ifLeft(Consumer<L> action) {
         return mapLeft(FunctionUtils.lift(action));
     }
@@ -77,115 +77,114 @@ public interface Either<L, R> extends Monad<R, Either<?, ?>>, BiFunctor<L, R, Ei
         return mapLeft(left).collect(l -> FunctionUtils.sneakyThrow(l), Function.identity());
     }
 
-    @SuppressWarnings({ "unchecked" })
     @NotNull
     @Contract("_ -> new")
     static <L1, R1> Either<L1, R1> left(L1 left) {
-        record Left<L, R>(L value) implements Either<L, R> {
-
-            @Override
-            @SuppressWarnings("unchecked")
-            public <T2> Either<L, T2> bind(Function<R, Monad<T2, Either<?, ?>>> map) {
-                return (Either<L, T2>) this;
-            }
-
-            @Override
-            public <L1> Either<L1, R> mapLeft(Function<L, L1> f) {
-                return new Left<>(f.apply(value));
-            }
-
-            @SuppressWarnings({ "unchecked" })
-            @Override
-            public <R1> Either<L, R1> mapRight(Function<R, R1> f) {
-                return (Either<L, R1>) this;
-            }
-
-            @Override
-            public Maybe<L> getLeft() {
-                return Maybe.just(value);
-            }
-
-            @Override
-            public Maybe<R> getRight() {
-                return Maybe.nothing();
-            }
-
-            @Override
-            public boolean isLeft() {
-                return true;
-            }
-
-            @Override
-            public boolean isRight() {
-                return false;
-            }
-
-            @Override
-            public Either<R, L> flip() {
-                return right(value);
-            }
-
-            @Override
-            public <U> U collect(Function<L, U> left, Function<R, U> right) {
-                return left.apply(value);
-            }
-        }
-
         return new Left<>(Objects.requireNonNull(left));
     }
 
-    @SuppressWarnings({ "unchecked" })
     @NotNull
     @Contract("_ -> new")
     static <L1, R1> Either<L1, R1> right(R1 right) {
-        record Right<L, R>(R value) implements Either<L, R> {
-            @Override
-            public <T2> Either<L, T2> bind(Function<R, Monad<T2, Either<?, ?>>> map) {
-                return (Either<L, T2>) map.apply(value);
-            }
-
-            @SuppressWarnings({ "unchecked" })
-            @Override
-            public <L1> Either<L1, R> mapLeft(Function<L, L1> f) {
-                return (Either<L1, R>) this;
-            }
-
-            @Override
-            public <R1> Either<L, R1> mapRight(Function<R, R1> f) {
-                return new Right<>(f.apply(value));
-            }
-
-            @Override
-            public Maybe<L> getLeft() {
-                return Maybe.nothing();
-            }
-
-            @Override
-            public Maybe<R> getRight() {
-                return Maybe.just(value);
-            }
-
-            @Override
-            public boolean isLeft() {
-                return false;
-            }
-
-            @Override
-            public boolean isRight() {
-                return true;
-            }
-
-            @Override
-            public Either<R, L> flip() {
-                return left(value);
-            }
-
-            @Override
-            public <U> U collect(Function<L, U> left, Function<R, U> right) {
-                return right.apply(value);
-            }
-        }
         return new Right<>(Objects.requireNonNull(right));
     }
 
+    record Left<L, R>(L value) implements Either<L, R> {
+
+        @Override
+        @SuppressWarnings("unchecked")
+        public <T2> Either<L, T2> bind(Function<R, Monad<T2, Either<?, ?>>> map) {
+            return (Either<L, T2>) this;
+        }
+
+        @Override
+        public <L1> Either<L1, R> mapLeft(Function<L, L1> f) {
+            return new Left<>(f.apply(value));
+        }
+
+        @SuppressWarnings({ "unchecked" })
+        @Override
+        public <R1> Either<L, R1> mapRight(Function<R, R1> f) {
+            return (Either<L, R1>) this;
+        }
+
+        @Override
+        public Maybe<L> getLeft() {
+            return Maybe.just(value);
+        }
+
+        @Override
+        public Maybe<R> getRight() {
+            return Maybe.nothing();
+        }
+
+        @Override
+        public boolean isLeft() {
+            return true;
+        }
+
+        @Override
+        public boolean isRight() {
+            return false;
+        }
+
+        @Override
+        public Either<R, L> flip() {
+            return right(value);
+        }
+
+        @Override
+        public <U> U collect(Function<L, U> left, Function<R, U> right) {
+            return left.apply(value);
+        }
+    }
+
+
+    record Right<L, R>(R value) implements Either<L, R> {
+        @Override
+        public <T2> Either<L, T2> bind(Function<R, Monad<T2, Either<?, ?>>> map) {
+            return (Either<L, T2>) map.apply(value);
+        }
+
+        @SuppressWarnings({ "unchecked" })
+        @Override
+        public <L1> Either<L1, R> mapLeft(Function<L, L1> f) {
+            return (Either<L1, R>) this;
+        }
+
+        @Override
+        public <R1> Either<L, R1> mapRight(Function<R, R1> f) {
+            return new Right<>(f.apply(value));
+        }
+
+        @Override
+        public Maybe<L> getLeft() {
+            return Maybe.nothing();
+        }
+
+        @Override
+        public Maybe<R> getRight() {
+            return Maybe.just(value);
+        }
+
+        @Override
+        public boolean isLeft() {
+            return false;
+        }
+
+        @Override
+        public boolean isRight() {
+            return true;
+        }
+
+        @Override
+        public Either<R, L> flip() {
+            return left(value);
+        }
+
+        @Override
+        public <U> U collect(Function<L, U> left, Function<R, U> right) {
+            return right.apply(value);
+        }
+    }
 }
