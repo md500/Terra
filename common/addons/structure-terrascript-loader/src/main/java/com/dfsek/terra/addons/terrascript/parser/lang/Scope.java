@@ -121,11 +121,11 @@ public class Scope {
         }
 
         public int getIndex(String id) {
-            return indices.get(id).getLeft();
+            return indices.get(id).left();
         }
 
         public ReturnType getType(String id) {
-            return indices.get(id).getRight();
+            return indices.get(id).right();
         }
 
 

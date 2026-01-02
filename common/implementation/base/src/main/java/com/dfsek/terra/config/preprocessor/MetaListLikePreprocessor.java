@@ -64,7 +64,7 @@ public class MetaListLikePreprocessor extends MetaPreprocessor<Meta> {
 
 
                         Pair<Configuration, Object> pair = getMetaValue(meta, depthTracker);
-                        Object metaValue = pair.getRight();
+                        Object metaValue = pair.right();
 
                         if(!(metaValue instanceof List)) {
                             throw new LoadException(
@@ -86,10 +86,10 @@ public class MetaListLikePreprocessor extends MetaPreprocessor<Meta> {
                                indexLevel.getIndex() >= begin &&
                                indexLevel.getIndex() <= end) {
                                 String configName;
-                                if(pair.getLeft().getName() == null) {
+                                if(pair.left().getName() == null) {
                                     configName = "Anonymous Configuration";
                                 } else {
-                                    configName = pair.getLeft().getName();
+                                    configName = pair.left().getName();
                                 }
                                 return Optional.of("From configuration \"" + configName + "\"");
                             }

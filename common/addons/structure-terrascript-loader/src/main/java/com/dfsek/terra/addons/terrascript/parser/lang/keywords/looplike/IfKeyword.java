@@ -41,8 +41,8 @@ public class IfKeyword implements Keyword<Block.ReturnInfo<?>> {
         if(statement.apply(implementationArguments, scope)) return conditional.apply(implementationArguments, scope);
         else {
             for(Pair<Returnable<Boolean>, Block> pair : elseIf) {
-                if(pair.getLeft().apply(implementationArguments, scope)) {
-                    return pair.getRight().apply(implementationArguments, scope);
+                if(pair.left().apply(implementationArguments, scope)) {
+                    return pair.right().apply(implementationArguments, scope);
                 }
             }
             if(elseBlock != null) return elseBlock.apply(implementationArguments, scope);

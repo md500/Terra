@@ -33,7 +33,6 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Optional;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -158,7 +157,7 @@ public class OpenRegistryImpl<T> implements OpenRegistry<T> {
         return objectIDs
             .get(id)
             .stream()
-            .collect(HashMap::new, (map, pair) -> map.put(pair.getLeft(), pair.getRight().getValue()), Map::putAll);
+            .collect(HashMap::new, (map, pair) -> map.put(pair.left(), pair.right().getValue()), Map::putAll);
     }
 
     public Map<RegistryKey, T> getDeadEntries() {

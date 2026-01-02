@@ -29,8 +29,6 @@ import com.dfsek.tectonic.api.loader.type.TypeLoader;
 import com.dfsek.tectonic.impl.loading.object.ObjectTemplateLoader;
 import com.dfsek.tectonic.yaml.YamlConfiguration;
 
-import com.dfsek.terra.api.tectonic.ConfigLoadingDelegate;
-
 import com.google.common.collect.ListMultimap;
 import com.google.common.collect.Multimaps;
 import org.jetbrains.annotations.NotNull;
@@ -51,11 +49,9 @@ import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.ServiceLoader.Provider;
 import java.util.Set;
 import java.util.TreeMap;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.function.Consumer;
 import java.util.function.Supplier;
 
 import com.dfsek.terra.api.Platform;
@@ -186,7 +182,7 @@ public class ConfigPackImpl implements ConfigPack {
 
         logger.info("Loading config pack \"{}:{}\"", id, namespace);
 
-        configTypes.values().forEach(list -> list.forEach(pair -> configTypeRegistry.register(pair.getLeft(), pair.getRight())));
+        configTypes.values().forEach(list -> list.forEach(pair -> configTypeRegistry.register(pair.left(), pair.right())));
 
         ListMultimap<ConfigType<?, ?>, Configuration> multimap = configurations.values().parallelStream().collect(
             () -> Multimaps.newListMultimap(new ConcurrentHashMap<>(), ArrayList::new), (configs, configuration) -> {
@@ -216,7 +212,7 @@ public class ConfigPackImpl implements ConfigPack {
                     return Pair.of(configuration.getID(), loaded);
                 })
                 .toList()
-                .forEach(pair -> registry.register(key(pair.getLeft()), pair.getRight()));
+                .forEach(pair -> registry.register(key(pair.left()), pair.right()));
             platform.getEventManager().callEvent(new ConfigTypePostLoadEvent(configType, registry, this));
         });
 
@@ -289,7 +285,7 @@ public class ConfigPackImpl implements ConfigPack {
     public ConfigPack registerConfigType(ConfigType<?, ?> type, RegistryKey key, int priority) {
         Set<RegistryKey> contained = new HashSet<>();
         configTypes.forEach((p, configs) -> configs.forEach(pair -> {
-            if(contained.contains(pair.getLeft())) throw new IllegalArgumentException("Duplicate config key: " + key);
+            if(contained.contains(pair.left())) throw new IllegalArgumentException("Duplicate config key: " + key);
             contained.add(key);
         }));
         configTypes.computeIfAbsent(priority, p -> new ArrayList<>()).add(Pair.of(key, type));

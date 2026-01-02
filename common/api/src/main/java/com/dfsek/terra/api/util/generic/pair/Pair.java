@@ -17,15 +17,8 @@ import java.util.function.Function;
 import java.util.function.Predicate;
 
 
-public final class Pair<L, R> {
+public record Pair<L, R>(L left, R right) implements Bifunctor{
     private static final Pair<?, ?> NULL = new Pair<>(null, null);
-    private final L left;
-    private final R right;
-
-    private Pair(L left, R right) {
-        this.left = left;
-        this.right = right;
-    }
 
     public static <L, R, T> Function<Pair<L, R>, Pair<T, R>> mapLeft(Function<L, T> function) {
         return pair -> of(function.apply(pair.left), pair.right);
@@ -74,19 +67,6 @@ public final class Pair<L, R> {
     @Contract("-> new")
     public Pair.Mutable<L, R> mutable() {
         return Mutable.of(left, right);
-    }
-
-    public R getRight() {
-        return right;
-    }
-
-    public L getLeft() {
-        return left;
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(left, right);
     }
 
     @Override

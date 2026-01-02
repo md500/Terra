@@ -46,13 +46,13 @@ public class MetaValuePreprocessor extends MetaPreprocessor<Meta> {
                 Pair<Configuration, Object> pair = getMetaValue(value.substring(1), depthTracker);
 
                 String configName;
-                if(pair.getLeft().getName() == null) {
+                if(pair.left().getName() == null) {
                     configName = "Anonymous Configuration";
                 } else {
-                    configName = pair.getLeft().getName();
+                    configName = pair.left().getName();
                 }
 
-                return (Result<T>) Result.overwrite(pair.getRight(), depthTracker.intrinsic("From configuration \"" + configName + "\""));
+                return (Result<T>) Result.overwrite(pair.right(), depthTracker.intrinsic("From configuration \"" + configName + "\""));
             }
         }
         return Result.noOp();

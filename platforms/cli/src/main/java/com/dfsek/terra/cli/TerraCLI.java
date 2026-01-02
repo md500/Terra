@@ -62,12 +62,12 @@ public final class TerraCLI implements Callable<Integer> {
 
         if(!noSave) {
             world.serialize().parallel().forEach(mcaFile -> {
-                Vector2Int pos = mcaFile.getLeft();
+                Vector2Int pos = mcaFile.left();
                 String name = MCAUtil.createNameFromRegionLocation(pos.getX(), pos.getZ());
                 LOGGER.info("Writing region ({}, {}) to {}", pos.getX(), pos.getZ(), name);
 
                 try {
-                    MCAUtil.write(mcaFile.getRight(), name);
+                    MCAUtil.write(mcaFile.right(), name);
                 } catch(IOException e) {
                     e.printStackTrace();
                 }
