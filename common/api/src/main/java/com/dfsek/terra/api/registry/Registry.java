@@ -29,6 +29,7 @@ import java.util.function.Function;
 
 import com.dfsek.terra.api.registry.key.RegistryKey;
 import com.dfsek.terra.api.util.reflection.TypeKey;
+import static com.dfsek.terra.api.util.function.FunctionUtils.*;
 
 
 public interface Registry<T> extends TypeLoader<T> {
@@ -96,11 +97,11 @@ public interface Registry<T> extends TypeLoader<T> {
 
     default Either<Invalid, T> getByID(String id) {
         return getByID(id, map -> {
-            if(map.isEmpty()) return Either.left(new NoSuchElement("No such value \"" + id + "\""));
+            if(map.isEmpty()) return left(new NoSuchElement("No such value \"" + id + "\""));
             if(map.size() == 1) {
-                return Either.right(map.values().stream().findFirst().get()); // only one value.
+                return right(map.values().stream().findFirst().get()); // only one value.
             }
-            return Either.left(new AmbiguousKey("ID \"" + id + "\" is ambiguous; matches: " + map
+            return left(new AmbiguousKey("ID \"" + id + "\" is ambiguous; matches: " + map
                 .keySet()
                 .stream()
                 .map(RegistryKey::toString)

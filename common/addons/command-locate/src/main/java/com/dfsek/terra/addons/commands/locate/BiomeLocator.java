@@ -16,6 +16,7 @@ import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
+import static com.dfsek.terra.api.util.function.FunctionUtils.*;
 
 
 public class BiomeLocator {
@@ -76,7 +77,7 @@ public class BiomeLocator {
                             .mapToObj(z -> new int[]{ minX, z }); // Fixed X (min), varying Z
 
                         Optional<Either<Vector3Int, Vector2Int>> ringResult = Stream.of(northSide, eastSide, southSide, westSide)
-                            .flatMap(Function.identity())
+                            .flatMap(identity())
                             .parallel()
                             .map(coords -> check(
                                 provider,
@@ -93,10 +94,10 @@ public class BiomeLocator {
                             .findFirst(); // findFirst() respects encounter order (North -> East -> South -> West)
 
                         if(ringResult.isPresent()) {
-                            return Maybe.fromOptional(ringResult);
+                            return fromOptional(ringResult);
                         }
                     }
-                    return Maybe.nothing();
+                    return nothing();
                 });
 
     }
@@ -120,16 +121,16 @@ public class BiomeLocator {
             // Iterate from bottom to top of the world using the step
             for(int y = minHeight; y < maxHeight; y += step) {
                 if(filter.test(provider.getBiome(x, y, z, seed))) {
-                    return Maybe.just(Either.left(Vector3Int.of(x, y, z)));
+                    return just(left(Vector3Int.of(x, y, z)));
                 }
             }
-            return Maybe.nothing();
+            return nothing();
         } else {
             // 2D Mode: Check only the base biome
             // We use a flatMap approach here to be safe with Optionals inside the stream
             return provider.getBaseBiome(x, z, seed)
                 .filter(filter)
-                .map(b -> Either.right(Vector2Int.of(x, z)));
+                .map(b -> right(Vector2Int.of(x, z)));
         }
     }
 }

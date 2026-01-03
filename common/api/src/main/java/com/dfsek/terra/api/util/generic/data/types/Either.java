@@ -7,8 +7,6 @@
 
 package com.dfsek.terra.api.util.generic.data.types;
 
-import com.dfsek.terra.api.util.function.FunctionUtils;
-
 import com.dfsek.terra.api.util.generic.control.Monad;
 
 import com.dfsek.terra.api.util.generic.data.BiFunctor;
@@ -20,28 +18,29 @@ import java.util.Objects;
 import java.util.Optional;
 import java.util.function.Consumer;
 import java.util.function.Function;
+import static com.dfsek.terra.api.util.function.FunctionUtils.*;
 
 
 public sealed interface Either<L, R> extends Monad<R, Either<?, ?>>, BiFunctor<L, R, Either<?, ?>> {
     static <T> T collapse(Either<T, T> either) {
-        return either.collect(Function.identity(), Function.identity());
+        return either.collect(identity(), identity());
     }
 
     @SuppressWarnings("unchecked")
     static <T, L> Either<L, T> toEither(Optional<T> o, L de) {
-        return (Either<L, T>) o.map(Either::right).orElseGet(() -> left(de));
+        return (Either<L, T>) o.map(Either::right).orElseGet(() -> Either.left(de));
     }
 
     @NotNull
     @Contract("_ -> this")
     default Either<L, R> ifLeft(@NotNull Consumer<L> action) {
-        return mapLeft(FunctionUtils.lift(action));
+        return mapLeft(lift(action));
     }
 
     @NotNull
     @Contract("_ -> this")
     default Either<L, R> ifRight(@NotNull Consumer<R> action) {
-        return mapRight(FunctionUtils.lift(action));
+        return mapRight(lift(action));
     }
 
     // Either is a functor in its right parameter.
@@ -52,7 +51,7 @@ public sealed interface Either<L, R> extends Monad<R, Either<?, ?>>, BiFunctor<L
 
     @Override
     default <T1> @NotNull Either<?, T1> pure(@NotNull T1 t) {
-        return right(t);
+        return Either.right(t);
     }
 
     @Override
@@ -64,13 +63,27 @@ public sealed interface Either<L, R> extends Monad<R, Either<?, ?>>, BiFunctor<L
     @Override
     <R1> @NotNull Either<L, R1> mapRight(@NotNull Function<R, R1> f);
 
-    Maybe<L> getLeft();
+    @Override
+    @NotNull
+    default <V, W> Either<V, W> bimap(@NotNull Function<L, V> left, @NotNull Function<R, W> right) {
+        return (Either<V, W>) BiFunctor.super.bimap(left, right);
+    }
 
-    Maybe<R> getRight();
+    default Maybe<L> getLeft() {
+        return collapse(bimap(Maybe::just, lift(Maybe::nothing)));
+    }
 
-    boolean isLeft();
+    default Maybe<R> getRight() {
+        return collapse(bimap(lift(Maybe::nothing), Maybe::just));
+    }
 
-    boolean isRight();
+    default boolean isLeft() {
+        return collapse(bimap(lift(true), lift(false)));
+    }
+
+    default boolean isRight() {
+        return collapse(bimap(lift(false), lift(true)));
+    }
 
     Either<R, L> flip();
 
@@ -88,7 +101,7 @@ public sealed interface Either<L, R> extends Monad<R, Either<?, ?>>, BiFunctor<L
 
     @SuppressWarnings("Convert2MethodRef")
     default <T extends Throwable> R collectThrow(Function<L, T> left) throws T {
-        return mapLeft(left).collect(l -> FunctionUtils.sneakyThrow(l), Function.identity());
+        return mapLeft(left).collect(l -> sneakyThrow(l), identity());
     }
 
     @NotNull
@@ -123,28 +136,8 @@ public sealed interface Either<L, R> extends Monad<R, Either<?, ?>>, BiFunctor<L
         }
 
         @Override
-        public Maybe<L> getLeft() {
-            return Maybe.just(value);
-        }
-
-        @Override
-        public Maybe<R> getRight() {
-            return Maybe.nothing();
-        }
-
-        @Override
-        public boolean isLeft() {
-            return true;
-        }
-
-        @Override
-        public boolean isRight() {
-            return false;
-        }
-
-        @Override
         public Either<R, L> flip() {
-            return right(value);
+            return Either.right(value);
         }
 
         @Override
@@ -172,28 +165,8 @@ public sealed interface Either<L, R> extends Monad<R, Either<?, ?>>, BiFunctor<L
         }
 
         @Override
-        public Maybe<L> getLeft() {
-            return Maybe.nothing();
-        }
-
-        @Override
-        public Maybe<R> getRight() {
-            return Maybe.just(value);
-        }
-
-        @Override
-        public boolean isLeft() {
-            return false;
-        }
-
-        @Override
-        public boolean isRight() {
-            return true;
-        }
-
-        @Override
         public Either<R, L> flip() {
-            return left(value);
+            return Either.left(value);
         }
 
         @Override
