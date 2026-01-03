@@ -8,6 +8,7 @@ import org.jetbrains.annotations.NotNull;
 import java.util.Objects;
 import java.util.function.Consumer;
 import java.util.function.Function;
+import java.util.function.Supplier;
 
 
 public final class FunctionUtils {
@@ -53,5 +54,9 @@ public final class FunctionUtils {
                 return Either.left(e);
             }
         };
+    }
+
+    public static <T> T construct(Supplier<T> in) {
+        return in.get();
     }
 }

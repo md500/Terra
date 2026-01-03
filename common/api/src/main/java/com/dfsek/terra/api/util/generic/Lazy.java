@@ -8,12 +8,10 @@
 package com.dfsek.terra.api.util.generic;
 
 import com.dfsek.terra.api.util.generic.control.Monad;
-import com.dfsek.terra.api.util.generic.data.Functor;
 
 import org.jetbrains.annotations.NotNull;
 
 import java.util.concurrent.atomic.AtomicBoolean;
-import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
@@ -29,6 +27,10 @@ public final class Lazy<T> implements Monad<T, Lazy<?>> {
 
     public static <T> Lazy<T> lazy(Supplier<T> valueSupplier) {
         return new Lazy<>(valueSupplier);
+    }
+
+    public static <T> Lazy<T> of(T value) {
+        return new Lazy<>(() -> value);
     }
 
     public T value() {
