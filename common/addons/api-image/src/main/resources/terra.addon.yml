@@ -1,7 +1,7 @@
 schema-version: 1
 contributors:
   - Terra contributors
-id: library-image
+id: api-image
 version: @VERSION@
 entrypoints:
   - "com.dfsek.terra.addons.image.ImageLibraryAddon"
