@@ -1,7 +1,7 @@
 schema-version: 1
 contributors:
   - Terra contributors
-id: biome-query-api
+id: api-biome-query
 version: @VERSION@
 entrypoints:
   - "com.dfsek.terra.addons.biome.query.BiomeQueryAPIAddon"
