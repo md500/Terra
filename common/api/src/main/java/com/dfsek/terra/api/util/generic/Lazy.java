@@ -45,7 +45,7 @@ public final class Lazy<T> implements Monad<T, Lazy<?>> {
 
     @Override
     public @NotNull <U> Lazy<U> map(@NotNull Function<T, U> map) {
-        return (Lazy<U>) Monad.super.map(map);
+        return lazy(() -> map.apply(value()));
     }
 
     @Override
