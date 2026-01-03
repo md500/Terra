@@ -16,21 +16,21 @@ import java.util.function.Function;
 import java.util.function.Supplier;
 
 
-public final class Lazy<T> implements Monad<T, Lazy<?>> {
+public final class Memo<T> implements Monad<T, Memo<?>> {
     private final Supplier<T> valueSupplier;
     private volatile T value = null;
     private final AtomicBoolean got = new AtomicBoolean(false);
 
-    private Lazy(Supplier<T> valueSupplier) {
+    private Memo(Supplier<T> valueSupplier) {
         this.valueSupplier = valueSupplier;
     }
 
-    public static <T> Lazy<T> lazy(Supplier<T> valueSupplier) {
-        return new Lazy<>(valueSupplier);
+    public static <T> Memo<T> lazy(Supplier<T> valueSupplier) {
+        return new Memo<>(valueSupplier);
     }
 
-    public static <T> Lazy<T> of(T value) {
-        return new Lazy<>(() -> value);
+    public static <T> Memo<T> of(T value) {
+        return new Memo<>(() -> value);
     }
 
     public T value() {
@@ -41,17 +41,17 @@ public final class Lazy<T> implements Monad<T, Lazy<?>> {
     }
 
     @Override
-    public @NotNull <T2> Lazy<T2> bind(@NotNull Function<T, Monad<T2, Lazy<?>>> map) {
-        return lazy(() -> ((Lazy<T2>) map.apply(value())).value());
+    public @NotNull <T2> Memo<T2> bind(@NotNull Function<T, Monad<T2, Memo<?>>> map) {
+        return lazy(() -> ((Memo<T2>) map.apply(value())).value());
     }
 
     @Override
-    public @NotNull <U> Lazy<U> map(@NotNull Function<T, U> map) {
+    public @NotNull <U> Memo<U> map(@NotNull Function<T, U> map) {
         return lazy(() -> map.apply(value()));
     }
 
     @Override
-    public @NotNull <T1> Lazy<T1> pure(@NotNull T1 t) {
-        return new Lazy<>(() -> t);
+    public @NotNull <T1> Memo<T1> pure(@NotNull T1 t) {
+        return new Memo<>(() -> t);
     }
 }

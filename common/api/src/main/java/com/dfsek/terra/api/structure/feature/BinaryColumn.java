@@ -11,7 +11,7 @@ import java.util.function.BooleanSupplier;
 import java.util.function.IntConsumer;
 
 import com.dfsek.terra.api.util.function.IntPredicate;
-import com.dfsek.terra.api.util.generic.Lazy;
+import com.dfsek.terra.api.util.generic.Memo;
 import com.dfsek.terra.api.util.range.Range;
 
 
@@ -23,7 +23,7 @@ public class BinaryColumn {
     private final IntPredicate data;
     private final int minY;
     private final int maxY;
-    private final Lazy<boolean[]> results;
+    private final Memo<boolean[]> results;
 
     /**
      * Constructs a new {@link BinaryColumn} with all values initiated to {@code false}
@@ -34,7 +34,7 @@ public class BinaryColumn {
     public BinaryColumn(int minY, int maxY, IntPredicate data) {
         this.minY = minY;
         this.maxY = maxY;
-        this.results = Lazy.lazy(() -> {
+        this.results = Memo.lazy(() -> {
             boolean[] res = new boolean[maxY - minY];
             for(int y = minY; y < maxY; y++) {
                 res[y - minY] = get(y);
@@ -48,7 +48,7 @@ public class BinaryColumn {
     public BinaryColumn(int minY, int maxY, boolean[] data) {
         this.minY = minY;
         this.maxY = maxY;
-        this.results = Lazy.lazy(() -> data);
+        this.results = Memo.lazy(() -> data);
         if(maxY <= minY) throw new IllegalArgumentException("Max y must be greater than min y");
         this.data = y -> data[y - minY];
     }

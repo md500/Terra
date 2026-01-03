@@ -17,7 +17,7 @@ import com.dfsek.terra.addons.image.image.Image;
 import com.dfsek.terra.addons.image.image.SuppliedImage;
 import com.dfsek.terra.api.config.ConfigPack;
 import com.dfsek.terra.api.properties.Properties;
-import com.dfsek.terra.api.util.generic.Lazy;
+import com.dfsek.terra.api.util.generic.Memo;
 
 import static com.dfsek.terra.api.util.cache.CacheUtils.CACHE_EXECUTOR;
 
@@ -41,7 +41,7 @@ record ImageCache(LoadingCache<String, Image> cache) implements Properties {
                 return new SuppliedImage(() -> images.cache.get(path));
             } else {
                 // If images do not time out, image can be lazily loaded once instead of performing cache lookups for each image operation
-                Lazy<Image> lazyImage = Lazy.lazy(() -> images.cache.get(path));
+                Memo<Image> lazyImage = Memo.lazy(() -> images.cache.get(path));
                 return new SuppliedImage(lazyImage::value);
             }
         }
