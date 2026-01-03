@@ -17,38 +17,52 @@ import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Objects;
+import java.util.Optional;
 import java.util.function.Consumer;
 import java.util.function.Function;
 
 
 public sealed interface Either<L, R> extends Monad<R, Either<?, ?>>, BiFunctor<L, R, Either<?, ?>> {
-    default Either<L, R> ifLeft(Consumer<L> action) {
+    static <T> T collapse(Either<T, T> either) {
+        return either.collect(Function.identity(), Function.identity());
+    }
+
+    @SuppressWarnings("unchecked")
+    static <T, L> Either<L, T> toEither(Optional<T> o, L de) {
+        return (Either<L, T>) o.map(Either::right).orElseGet(() -> left(de));
+    }
+
+    @NotNull
+    @Contract("_ -> this")
+    default Either<L, R> ifLeft(@NotNull Consumer<L> action) {
         return mapLeft(FunctionUtils.lift(action));
     }
 
-    default Either<L, R> ifRight(Consumer<R> action) {
+    @NotNull
+    @Contract("_ -> this")
+    default Either<L, R> ifRight(@NotNull Consumer<R> action) {
         return mapRight(FunctionUtils.lift(action));
     }
 
     // Either is a functor in its right parameter.
     @Override
-    default <U> Either<L, U> map(Function<R, U> map) {
+    default <U> @NotNull Either<L, U> map(@NotNull Function<R, U> map) {
         return mapRight(map);
     }
 
     @Override
-    default <T1> Either<?, T1> pure(T1 t) {
+    default <T1> @NotNull Either<?, T1> pure(@NotNull T1 t) {
         return right(t);
     }
 
     @Override
-    <T2> Either<L, T2> bind(Function<R, Monad<T2, Either<?, ?>>> map);
+    <T2> @NotNull Either<L, T2> bind(@NotNull Function<R, Monad<T2, Either<?, ?>>> map);
 
     @Override
-    <L1> Either<L1, R> mapLeft(Function<L, L1> f);
+    <L1> @NotNull Either<L1, R> mapLeft(@NotNull Function<L, L1> f);
 
     @Override
-    <R1> Either<L, R1> mapRight(Function<R, R1> f);
+    <R1> @NotNull Either<L, R1> mapRight(@NotNull Function<R, R1> f);
 
     Maybe<L> getLeft();
 
@@ -93,18 +107,18 @@ public sealed interface Either<L, R> extends Monad<R, Either<?, ?>>, BiFunctor<L
 
         @Override
         @SuppressWarnings("unchecked")
-        public <T2> Either<L, T2> bind(Function<R, Monad<T2, Either<?, ?>>> map) {
+        public <T2> @NotNull Either<L, T2> bind(@NotNull Function<R, Monad<T2, Either<?, ?>>> map) {
             return (Either<L, T2>) this;
         }
 
         @Override
-        public <L1> Either<L1, R> mapLeft(Function<L, L1> f) {
+        public <L1> @NotNull Either<L1, R> mapLeft(@NotNull Function<L, L1> f) {
             return new Left<>(f.apply(value));
         }
 
         @SuppressWarnings({ "unchecked" })
         @Override
-        public <R1> Either<L, R1> mapRight(Function<R, R1> f) {
+        public <R1> @NotNull Either<L, R1> mapRight(@NotNull Function<R, R1> f) {
             return (Either<L, R1>) this;
         }
 
@@ -142,18 +156,18 @@ public sealed interface Either<L, R> extends Monad<R, Either<?, ?>>, BiFunctor<L
 
     record Right<L, R>(R value) implements Either<L, R> {
         @Override
-        public <T2> Either<L, T2> bind(Function<R, Monad<T2, Either<?, ?>>> map) {
+        public <T2> @NotNull Either<L, T2> bind(@NotNull Function<R, Monad<T2, Either<?, ?>>> map) {
             return (Either<L, T2>) map.apply(value);
         }
 
         @SuppressWarnings({ "unchecked" })
         @Override
-        public <L1> Either<L1, R> mapLeft(Function<L, L1> f) {
+        public <L1> @NotNull Either<L1, R> mapLeft(@NotNull Function<L, L1> f) {
             return (Either<L1, R>) this;
         }
 
         @Override
-        public <R1> Either<L, R1> mapRight(Function<R, R1> f) {
+        public <R1> @NotNull Either<L, R1> mapRight(@NotNull Function<R, R1> f) {
             return new Right<>(f.apply(value));
         }
 

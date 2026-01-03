@@ -27,7 +27,7 @@ import com.dfsek.terra.api.util.reflection.TypeKey;
 import com.dfsek.terra.api.world.World;
 import com.dfsek.terra.api.world.biome.Biome;
 
-import static com.dfsek.terra.api.util.function.FunctionUtils.collapse;
+import static com.dfsek.terra.api.util.generic.data.types.Either.collapse;
 
 
 public class LocateCommandAddon implements AddonInitializer {

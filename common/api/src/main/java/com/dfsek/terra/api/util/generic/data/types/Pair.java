@@ -21,11 +21,11 @@ import java.util.function.Predicate;
 public record Pair<L, R>(L left, R right) implements BiFunctor<L, R, Pair<?, ?>> {
     private static final Pair<?, ?> NULL = new Pair<>(null, null);
 
-    public <T> Pair<T, R> mapLeft(Function<L, T> function) {
+    public <T> @NotNull Pair<T, R> mapLeft(@NotNull Function<L, T> function) {
         return of(function.apply(left), right);
     }
 
-    public <T> Pair<L, T> mapRight(Function<R, T> function) {
+    public <T> @NotNull Pair<L, T> mapRight(@NotNull Function<R, T> function) {
         return of(left, function.apply(right));
     }
 

@@ -3,6 +3,8 @@ package com.dfsek.terra.api.util.generic.data.types;
 import com.dfsek.terra.api.util.generic.control.Monad;
 import com.dfsek.terra.api.util.generic.data.LinkedList;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.util.NoSuchElementException;
 import java.util.Optional;
 import java.util.function.Consumer;
@@ -14,12 +16,12 @@ import java.util.stream.Stream;
 
 public sealed interface Maybe<T> extends Monad<T, Maybe<?>> {
     @Override
-    default <T1> Maybe<T1> pure(T1 t) {
+    default <T1> @NotNull Maybe<T1> pure(@NotNull T1 t) {
         return just(t);
     }
 
     @Override
-    <T2> Maybe<T2> bind(Function<T, Monad<T2, Maybe<?>>> map);
+    <T2> @NotNull Maybe<T2> bind(@NotNull Function<T, Monad<T2, Maybe<?>>> map);
 
     Optional<T> toOptional();
 
@@ -30,7 +32,7 @@ public sealed interface Maybe<T> extends Monad<T, Maybe<?>> {
     boolean isJust();
 
     @Override
-    <U> Maybe<U> map(Function<T, U> map);
+    <U> @NotNull Maybe<U> map(@NotNull Function<T, U> map);
 
     default T get(T def) {
         return get(() -> def);
@@ -137,7 +139,7 @@ public sealed interface Maybe<T> extends Monad<T, Maybe<?>> {
         }
 
         @Override
-        public <U> Maybe<U> map(Function<T, U> map) {
+        public <U> @NotNull Maybe<U> map(@NotNull Function<T, U> map) {
             return just(map.apply(value));
         }
 
@@ -147,7 +149,7 @@ public sealed interface Maybe<T> extends Monad<T, Maybe<?>> {
         }
 
         @Override
-        public <T2> Maybe<T2> bind(Function<T, Monad<T2, Maybe<?>>> map) {
+        public <T2> @NotNull Maybe<T2> bind(@NotNull Function<T, Monad<T2, Maybe<?>>> map) {
             return (Maybe<T2>) map.apply(value);
         }
     }
@@ -155,7 +157,7 @@ public sealed interface Maybe<T> extends Monad<T, Maybe<?>> {
 
     record Nothing<T>() implements Maybe<T> {
         @Override
-        public <T2> Maybe<T2> bind(Function<T, Monad<T2, Maybe<?>>> map) {
+        public <T2> @NotNull Maybe<T2> bind(@NotNull Function<T, Monad<T2, Maybe<?>>> map) {
             return nothing();
         }
 
@@ -181,7 +183,7 @@ public sealed interface Maybe<T> extends Monad<T, Maybe<?>> {
 
         @Override
         @SuppressWarnings("unchecked")
-        public <U> Maybe<U> map(Function<T, U> map) {
+        public <U> @NotNull Maybe<U> map(@NotNull Function<T, U> map) {
             return (Maybe<U>) this;
         }
 
