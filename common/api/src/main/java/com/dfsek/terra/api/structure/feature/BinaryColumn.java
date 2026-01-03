@@ -10,7 +10,7 @@ package com.dfsek.terra.api.structure.feature;
 import java.util.function.BooleanSupplier;
 import java.util.function.IntConsumer;
 
-import com.dfsek.terra.api.util.function.IntToBooleanFunction;
+import com.dfsek.terra.api.util.function.IntPredicate;
 import com.dfsek.terra.api.util.generic.Lazy;
 import com.dfsek.terra.api.util.range.Range;
 
@@ -20,7 +20,7 @@ import com.dfsek.terra.api.util.range.Range;
  */
 public class BinaryColumn {
     private static final BinaryColumn NULL = new BinaryColumn(0, 1, y -> false);
-    private final IntToBooleanFunction data;
+    private final IntPredicate data;
     private final int minY;
     private final int maxY;
     private final Lazy<boolean[]> results;
@@ -31,7 +31,7 @@ public class BinaryColumn {
      * @param minY Minimum Y value
      * @param maxY Maximum Y value
      */
-    public BinaryColumn(int minY, int maxY, IntToBooleanFunction data) {
+    public BinaryColumn(int minY, int maxY, IntPredicate data) {
         this.minY = minY;
         this.maxY = maxY;
         this.results = Lazy.lazy(() -> {
@@ -53,7 +53,7 @@ public class BinaryColumn {
         this.data = y -> data[y - minY];
     }
 
-    public BinaryColumn(Range y, IntToBooleanFunction data) {
+    public BinaryColumn(Range y, IntPredicate data) {
         this(y.getMin(), y.getMax(), data);
     }
 
