@@ -1,9 +1,9 @@
-package com.dfsek.terra.bukkit.nms;
+package com.dfsek.terra.bukkit.nms.v1_21_8;
 
 import com.dfsek.terra.bukkit.TerraBukkitPlugin;
-import com.dfsek.terra.bukkit.nms.processors.NetherProcess;
-import com.dfsek.terra.bukkit.nms.processors.OverworldProcess;
-import com.dfsek.terra.bukkit.nms.processors.TheEndProcess;
+import com.dfsek.terra.bukkit.nms.v1_21_8.processors.NetherProcess;
+import com.dfsek.terra.bukkit.nms.v1_21_8.processors.OverworldProcess;
+import com.dfsek.terra.bukkit.nms.v1_21_8.processors.TheEndProcess;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Chunk;
