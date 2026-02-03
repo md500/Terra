@@ -1,3 +1,17 @@
+> [!WARNING]
+>
+> **Unofficial Legacy Build (v6.6.6)**
+>
+> This is a fork of Terra, based on version 6.6.6 with backported fixes from [flyawaymaking patches](https://github.com/flyawaymaking/Terra-PaperProcessing) to give compatibility with dev builds of [Tartarus](https://github.com/md500/Tartarus) and [ReimagEND](https://github.com/md500/ReimagEND) packs in 6.6.6 and Minecraft >=1.21.5 and <=1.21.8
+>
+> # This version is **NOT supported** by PolyhedralDev team!
+> is for servers that cannot update to Terra v7.0 or Minecraft +1.21.9 
+> # Do not report bugs from this build to the official bug tracker.
+>
+> Please go to [**PolyhedralDev/Terra**](https://github.com/PolyhedralDev/Terra) if you use Minecraft +1.21.9 or an older build of Minecraft.
+>
+
+
 <img align="left" width="64" height="64" src="https://raw.githubusercontent.com/wiki/PolyhedralDev/Terra/images/terra_logo.png" alt="Terra Logo">
 
 # Terra
